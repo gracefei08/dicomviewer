@@ -11,9 +11,6 @@
     "tabs","nativeMessaging"
   ],
   "host_permissions":["https://www.pacsbin.com/*"],
-  "background": {
-    "service_worker": "background.js"
-  },
   "content_scripts": [
     {
       "matches": [
