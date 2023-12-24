@@ -8,5 +8,14 @@ function injectScript(file_path, tag) {
 
 let a = injectScript(chrome.runtime.getURL('inject.js'), 'body');
 
-window.addEventListener('message', (message) => chrome.storage.local.set({'PAC_DATA':JSON.stringify(message.data)}),{ once: true })
+window.addEventListener('message', (message) => {
+    console.log(message.data)
+    let metadata = message.data.data.map(x=>({
+        "label":x.label,
+        "modality":x.modality,
+        "images":x.instances.map(y=>(y.url))
+
+    }))
+    console.log(metadata)
+    chrome.storage.local.set({'PAC_DATA':metadata})},{ once: true })
 
