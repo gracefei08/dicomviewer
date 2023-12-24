@@ -5,7 +5,7 @@ import {useChromeStorageLocal} from 'use-chrome-storage';
 
 
 function App() {
-  const [value, setValue, isPersistent, error, isInitialStateResolved] = useChromeStorageLocal('test', "init");
+  const [value, setValue, isPersistent, error, isInitialStateResolved] = useChromeStorageLocal("PAC_DATA", "");
   return (
     <div>
       <HeaderComp></HeaderComp>

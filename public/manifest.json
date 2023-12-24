@@ -7,35 +7,37 @@
     "48": "logo192.png",
     "128": "logo192.png"
   },
-  "version": "1.0",
-  "manifest_version": 3,
-  "action": {
-    "default_popup": "index.html",
-    "default_title": "Open the popup"
-  },
-  "permissions": [
-    "tabs",
-    "storage"
+  "permissions": ["storage",
+    "tabs","nativeMessaging"
   ],
+  "host_permissions":["https://www.pacsbin.com/*"],
   "background": {
     "service_worker": "background.js"
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.pacsbin.com/*"
+      ],
+      "js": ["contentScripts.js"]
+    }
+  ],
   "web_accessible_resources": [
     {
       "resources": [
-        "contentScripts.js"
+        "inject.js"
       ],
       "matches": [
         "https://www.pacsbin.com/*"
       ]
     }
   ],
-  "content_scripts": [
-    {
-      "matches": [
-        "https://www.pacsbin.com/*"
-      ],
-      "js": ["inject.js"]
-    }
-  ]
+  "externally_connectable": {
+    "ids": ["*"]},
+  "version": "1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Open the popup"
+  }
 }

@@ -1,13 +1,10 @@
-function injectScript(file_path, tag) {
-    var node = document.getElementsByTagName(tag)[0];
-    var script = document.createElement('script');
-    script.setAttribute('type', 'text/javascript');
-    script.setAttribute('src', file_path);
-    node.appendChild(script);
-    console.log(window.studydata)
-}
+window.postMessage({data: window.studydata.series})
+/** 
+console.log('running this');
+console.log(window.studydata)
+window.postMessage("message","*")
+chrome.runtime.sendMessage('get-user-data', (response) => {
 
-injectScript(chrome.runtime.getURL('contentScripts.js'), 'body');
-chrome.storage.local.set({ "test": "value" }).then(() => {
-    console.log("Value is set");
-  });
+    console.log('received user data', response);
+  
+  });*/
