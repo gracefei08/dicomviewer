@@ -13,6 +13,7 @@ window.addEventListener('message', (message) => {
     let metadata = message.data.data.map(x=>({
         "label":x.label,
         "modality":x.modality,
+        "id":x._id,
         "images":x.instances.map(y=>(y.url))
 
     }))
