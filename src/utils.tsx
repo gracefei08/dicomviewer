@@ -13,8 +13,8 @@ export interface MetaData {
   suffix: string,
   start_slice:number,
   end_slice : number,
-  window_width:number,
-  window_center:number,
+  ww:number,
+  wc:number,
   ci:number,
   z:number,
   px:number,
@@ -60,8 +60,8 @@ export function generateMetaData(list:Array<rawMetaData>) {
         suffix: longestCommonSuffix(x.images),
         start_slice:0,
         end_slice : x.images.length,
-        window_width:1400,
-        window_center:1200,
+        ww:1400,
+        wc:1200,
         ci:0,
         z:1,
         px:0,
@@ -84,8 +84,8 @@ export function generateURL(data:MetaData){
   URL_genereated.searchParams.append("vd.0.s.sf", data.suffix);
   URL_genereated.searchParams.append("vd.0.s.s", data.start_slice.toString());
   URL_genereated.searchParams.append("vd.0.s.e", data.end_slice.toString());
-  URL_genereated.searchParams.append("vd.0.ww", data.window_width.toString());
-  URL_genereated.searchParams.append("vd.0.wc", data.window_center.toString());
+  URL_genereated.searchParams.append("vd.0.ww", data.ww.toString());
+  URL_genereated.searchParams.append("vd.0.wc", data.wc.toString());
 
   URL_genereated.searchParams.append("vd.0.ci", data.ci.toString());
   URL_genereated.searchParams.append("vd.1.z", data.z.toString());
@@ -112,8 +112,8 @@ export function generateGridURL(metaDataList:MetaData[],row:number,col:number){
     URL_genereated.searchParams.append("vd."+value+".s.sf", data.suffix);
     URL_genereated.searchParams.append("vd."+value+".s.s", data.start_slice.toString());
     URL_genereated.searchParams.append("vd."+value+".s.e", data.end_slice.toString());
-    URL_genereated.searchParams.append("vd."+value+".ww", data.window_width.toString());
-    URL_genereated.searchParams.append("vd."+value+".wc", data.window_center.toString());
+    URL_genereated.searchParams.append("vd."+value+".ww", data.ww.toString());
+    URL_genereated.searchParams.append("vd."+value+".wc", data.wc.toString());
   
     URL_genereated.searchParams.append("vd."+value+".ci", data.ci.toString());
     URL_genereated.searchParams.append("vd."+value+".z", data.z.toString());

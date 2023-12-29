@@ -37,8 +37,8 @@ function App() {
     suffix: "",
     start_slice:0,
     end_slice : 0,
-    window_width:0,
-    window_center:0,
+    ww:0,
+    wc:0,
     ci:0,
     z:0,
     px:0,
@@ -57,7 +57,6 @@ const handleClick = (metadata:MetaData) => {
   setMetaDataSelected(metadata)
 }
 const handleClick2 = () => {
-  console.log('the')
   setRightDrawerState(true)
 
 }
@@ -70,12 +69,13 @@ const handleClick2 = () => {
       {metaDataList && metaDataList.map(metadata =>
         <Card sx={{ maxWidth: 350 }}>
           <CardActionArea onClick={()=>handleClick(metadata)}>
-            <CardMedia
+            {/**<CardMedia
               component="img"
               height="140"
               image={metadata.thumbnail}
               alt="thumbnail image"
-            />
+            />*/}
+
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
                 {metadata.label}
@@ -111,12 +111,6 @@ const handleClick2 = () => {
     </DndProvider>
   );
 }
-/** 
-{metaDataList && metaDataList.map( metadata=> 
-  <div>{generateURL(metadata)}
-  <CopyToClipboardButtonComp/>
-  </div> 
-  
-)}*/
+
 export default App;
 
