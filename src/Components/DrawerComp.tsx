@@ -21,8 +21,9 @@ interface DrawerCompProps {
 }
 
 const DrawerComp: React.VFC<DrawerCompProps>  = ({metadata,metaDataList,setMetaDataList,setDrawerState}) => {
-    const [open, setOpen] = useState(false)
     const [url, setURL] = useState<string>("Click Generate URL");
+
+    
     
     return (
         <Box
@@ -44,13 +45,13 @@ const DrawerComp: React.VFC<DrawerCompProps>  = ({metadata,metaDataList,setMetaD
         <Divider />
 
         <Button variant="contained" onClick = {()=>setURL(generateURL((metaDataList.filter(function(element){ return element.id>= metadata.id; }))[0]))}>Generate URL</Button>
-        <div>
+    
       
           {url }
           
           <CopyToClipboardButtonComp url={url}/>
         
-        </div>
+    
       </Box>
       
     )

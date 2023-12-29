@@ -20,6 +20,7 @@ export interface MetaData {
   px:number,
   py:number,
   r:number,
+  cord:number[]
 }
 
 
@@ -66,6 +67,7 @@ export function generateMetaData(list:Array<rawMetaData>) {
         px:0,
         py:0,
         r:0,
+        cord:[-1,-1]
       }));
     return objs
 
@@ -95,7 +97,39 @@ export function generateURL(data:MetaData){
 
 
 }
+export function generateGridURL(metaDataList:MetaData[],row:number,col:number){
+  const URL_genereated  = new URL("https://attheviewbox.github.io/TemplateStaticCornerstone3DViewport/");
 
+  URL_genereated.searchParams.append("m", "true");
+  URL_genereated.searchParams.append("ld.r", row.toString());
+  URL_genereated.searchParams.append("ld.c", col.toString());
+
+  metaDataList.map((data)=>{
+    if (data.cord[0]!=-1 && data.cord[1]!=-1){
+      console.log(data.cord[0],data.cord[1])
+      let value = ((data.cord[0]+1*data.cord[1]+1)-1).toString()
+    URL_genereated.searchParams.append("vd."+value+".s.pf", encodeURI("dicomweb:"+data.prefix));
+    URL_genereated.searchParams.append("vd."+value+".s.sf", data.suffix);
+    URL_genereated.searchParams.append("vd."+value+".s.s", data.start_slice.toString());
+    URL_genereated.searchParams.append("vd."+value+".s.e", data.end_slice.toString());
+    URL_genereated.searchParams.append("vd."+value+".ww", data.window_width.toString());
+    URL_genereated.searchParams.append("vd."+value+".wc", data.window_center.toString());
+  
+    URL_genereated.searchParams.append("vd."+value+".ci", data.ci.toString());
+    URL_genereated.searchParams.append("vd."+value+".z", data.z.toString());
+    URL_genereated.searchParams.append("vd."+value+".px", data.px.toString());
+    URL_genereated.searchParams.append("vd."+value+".py", data.py.toString());
+    URL_genereated.searchParams.append("vd."+value+".r", data.r.toString());
+    }
+
+
+  })
+
+  console.log(URL_genereated.href)
+  return URL_genereated.href
+
+
+}
 /**"https://s3.amazonaws.com/elasticbeanstalk-us-east-1-843279806438/dicom/production/-ywXf2R16d_1.3.12.2.1107.5.1.4.73513.30000019073108281347500001430/1.dcm.gz"
 "https://s3.amazonaws.com/elasticbeanstalk-us-east-1-843279806438/dicom/production/-ywXf2R16d_1.3.12.2.1107.5.1.4.73513.30000019073110243989500021595/001.dcm.gz"
 "https://s3.amazonaws.com/elasticbeanstalk-us-east-1-843279806438/dicom/production/-ywXf2R16d_1.3.12.2.1107.5.1.4.73513.30000019073110243989500022713/101.dcm.gz"
@@ -131,8 +165,8 @@ vd.1.px=0&
 vd.1.py=0&
 vd.1.r=0
 https://attheviewbox.github.io/TemplateStaticCornerstone3DViewport/?m=true&
-ld.r=1&
-ld.c=1&
+ld.r=2&
+ld.c=2&
 vd.0.s.pf=dicomweb%3Ahttps%3A%2F%2Fs3.amazonaws.com%2Felasticbeanstalk-us-east-1-843279806438%2Fdicom%2Fproduction%2F-ywXf2R16d_1.3.12.2.1107.5.1.4.73513.30000019073110243989500020904%2F&
 vd.0.s.sf=.dcm.gz&
 vd.0.s.s=202&
@@ -144,14 +178,29 @@ vd.0.z=1&
 vd.0.px=0&
 vd.0.py=0&
 vd.0.r=0&
-vd.1.s.pf=dicomweb%3Ahttps%3A%2F%2Fs3.amazonaws.com%2Felasticbeanstalk-us-east-1-843279806438%2Fdicom%2Fproduction%2F-ywXf2R16d_1.3.12.2.1107.5.1.4.73513.30000019073110243989500021446%2F&
-vd.1.s.sf=.dcm.gz&
-vd.1.s.s=050&
-vd.1.s.e=100&
-vd.1.ww=1400&
-vd.1.wc=1200&
-vd.1.ci=0&
-vd.1.z=1&
-vd.1.px=0&
-vd.1.py=0&
-vd.1.r=0*/
+vd.3.s.pf=dicomweb%3Ahttps%3A%2F%2Fs3.amazonaws.com%2Felasticbeanstalk-us-east-1-843279806438%2Fdicom%2Fproduction%2F-ywXf2R16d_1.3.12.2.1107.5.1.4.73513.30000019073110243989500021446%2F&
+vd.3.s.sf=.dcm.gz&
+vd.3.s.s=050&
+vd.3.s.e=100&
+vd.3.ww=1400&
+vd.3.wc=1200&
+vd.3.ci=0&
+vd.3.z=1&
+vd.3.px=0&
+vd.3.py=0&
+vd.3.r=0
+vd.2.s.pf=dicomweb%3Ahttps%3A%2F%2Fs3.amazonaws.com%2Felasticbeanstalk-us-east-1-843279806438%2Fdicom%2Fproduction%2F-ywXf2R16d_1.3.12.2.1107.5.1.4.73513.30000019073108281347500001430%2F&
+vd.2.s.sf=.dcm.gz&
+vd.2.s.s=0&
+vd.2.s.e=2&
+vd.2.ww=1400&
+vd.2.wc=1200&
+vd.2.ci=0&
+vd.2.z=1&
+vd.2.px=0&
+vd.2.py=0&
+vd.2.r=0
+
+
+
+*/

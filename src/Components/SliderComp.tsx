@@ -23,7 +23,6 @@ const SliderComp: React.VFC<SliderProps> = ({metadata,metaDataList,setMetaDataLi
     if (!Array.isArray(newValue)) {
       return;
     }
-    console.log("here")
     let temp1 = value[0]
     let temp2 = value[1]
     if (activeThumb === 0) {
