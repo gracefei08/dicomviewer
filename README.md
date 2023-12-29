@@ -1,3 +1,13 @@
+# Testing Chrome extension
+### `npm run build`
+Go to:  chrome://extensions/
+
+Turn on Developer Mode
+
+Load in the build folder
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
