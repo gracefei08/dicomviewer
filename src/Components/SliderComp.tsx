@@ -27,8 +27,6 @@ const SliderComp: React.VFC<SliderProps> = ({metadata,metaDataList,setMetaDataLi
     let temp2 = value[1]
     if (activeThumb === 0) {
       setValue([Math.min(newValue[0], temp2 - minDistance), temp2]);
-      console.log('min',metadata.id,metadata.end_slice,metadata.start_slice)
-      console.log(Math.min(newValue[0], temp2 - minDistance))
       setMetaDataList([...metaDataList].map(object => {
         if(object.id === metadata.id) {
           return {
@@ -59,13 +57,14 @@ const SliderComp: React.VFC<SliderProps> = ({metadata,metaDataList,setMetaDataLi
 
   return (
     <>
-    <Box sx={{ width: 300 }}>
+    <Box sx={{ width: 300 }} >
       <Slider
         value={value}
         onChange={handleChange1}
         valueLabelDisplay="auto"
         disableSwap
         max={max}
+        min={1}
       />
 
     </Box>

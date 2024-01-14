@@ -21,8 +21,7 @@ interface DrawerCompProps {
 
 const DrawerComp: React.VFC<DrawerCompProps>  = ({metadata,metaDataList,setMetaDataList,setDrawerState}) => {
     const [url, setURL] = useState<string>("Click Generate URL");
-
-    
+     
     const saveStates = ((key:string, event: React.ChangeEvent<HTMLInputElement>)=>{
         setMetaDataList([...metaDataList].map(object => {
             if(object.id === metadata.id) {
@@ -40,17 +39,16 @@ const DrawerComp: React.VFC<DrawerCompProps>  = ({metadata,metaDataList,setMetaD
     })
     return (
         <Box
-        sx={{ width:350 }}
+        sx={{ width:400 }}
         role="presentation"
-        
-       
       >
-      
+
       <IconButton aria-label="delete" size="small" onClick = {()=>setDrawerState(false)}>
         <CloseIcon />
         
       </IconButton>
       <Typography>{metadata.label}</Typography>
+
       <Divider />
         <Typography>Slice Range</Typography>
         <SliderComp metadata={metadata} metaDataList={metaDataList} setMetaDataList={setMetaDataList}/>
@@ -71,16 +69,16 @@ const DrawerComp: React.VFC<DrawerCompProps>  = ({metadata,metaDataList,setMetaD
 
         <Divider />
     
-
+    {/** 
         <Button variant="contained" onClick = {()=>setURL(generateURL((metaDataList.filter(function(element){ return element.id>= metadata.id; }))[0]))}>Generate URL</Button>
     
       
           {url }
           
-          <CopyToClipboardButtonComp url={url}/>
+          <CopyToClipboardButtonComp url={url}/>*/}
         
     
-      </Box>
+    </Box>
       
     )
 }

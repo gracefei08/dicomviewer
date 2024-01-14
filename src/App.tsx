@@ -18,8 +18,17 @@ import { MetaData } from './utils';
 import RightDrawerComp from './Components/RightDrawerComp';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DataProvider } from './DataContext';
 
-
+//@ts-ignore
+import CornerstoneViewport from 'react-cornerstone-viewport'
+//@ts-ignore
+import cornerstoneDICOMImageLoader from '@cornerstonejs/dicom-image-loader';
+//@ts-ignore
+import * as cornerstone from '@cornerstonejs/core';
+//@ts-ignore
+import * as cornerstoneTools from '@cornerstonejs/tools';
+import dicomParser from 'dicom-parser';
 
 
 
@@ -52,6 +61,7 @@ function App() {
     setMetaDataList(generateMetaData(value))
 }, [value])
 
+
 const handleClick = (metadata:MetaData) => {
   setDrawerState(true)
   setMetaDataSelected(metadata)
@@ -60,21 +70,20 @@ const handleClick2 = () => {
   setRightDrawerState(true)
 
 }
+
+
   return (
+  <DataProvider>
     <DndProvider backend={HTML5Backend}>
-    <div>
+      
+    <div >
       <HeaderComp/>
       <Divider />
       <Button variant="contained" disableElevation onClick={handleClick2}>Organize Layout</Button>
       {metaDataList && metaDataList.map(metadata =>
         <Card sx={{ maxWidth: 350 }}>
           <CardActionArea onClick={()=>handleClick(metadata)}>
-            {/**<CardMedia
-              component="img"
-              height="140"
-              image={metadata.thumbnail}
-              alt="thumbnail image"
-            />*/}
+  
 
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
@@ -106,9 +115,11 @@ const handleClick2 = () => {
 
         </Card>
       )}
-
+   
     </div>
+    
     </DndProvider>
+    </DataProvider>
   );
 }
 

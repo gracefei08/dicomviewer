@@ -58,7 +58,7 @@ export function generateMetaData(list:Array<rawMetaData>) {
         id:x.id,
         prefix: longestCommonPrefix(x.images), 
         suffix: longestCommonSuffix(x.images),
-        start_slice:0,
+        start_slice:1,
         end_slice : x.images.length,
         ww:1400,
         wc:1200,
@@ -92,7 +92,6 @@ export function generateURL(data:MetaData){
   URL_genereated.searchParams.append("vd.1.px", data.px.toString());
   URL_genereated.searchParams.append("vd.1.py", data.py.toString());
   URL_genereated.searchParams.append("vd.1.r", data.r.toString());
-  console.log(URL_genereated.href)
   return URL_genereated.href
 
 
@@ -109,8 +108,8 @@ export function generateGridURL(metaDataList:MetaData[],row:number,col:number){
       let value = (((data.cord[0]+1)+(col*(data.cord[1])))-1).toString()
     URL_genereated.searchParams.append("vd."+value+".s.pf", encodeURI("dicomweb:"+data.prefix));
     URL_genereated.searchParams.append("vd."+value+".s.sf", data.suffix);
-    URL_genereated.searchParams.append("vd."+value+".s.s", data.start_slice.toString());
-    URL_genereated.searchParams.append("vd."+value+".s.e", data.end_slice.toString());
+    URL_genereated.searchParams.append("vd."+value+".s.s", String(data.start_slice).padStart(3, '0'));
+    URL_genereated.searchParams.append("vd."+value+".s.e",String(data.end_slice).padStart(3, '0'));
     URL_genereated.searchParams.append("vd."+value+".ww", data.ww.toString());
     URL_genereated.searchParams.append("vd."+value+".wc", data.wc.toString());
   
