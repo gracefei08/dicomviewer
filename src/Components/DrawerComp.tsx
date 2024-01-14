@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { MetaData,generateURL  } from '../utils';
 import Divider from '@mui/material/Divider';
+import Viewport from './Viewport';
 import CopyToClipboardButtonComp from './CopyToClipboardButtonComp';
 
 
@@ -50,6 +51,7 @@ const DrawerComp: React.VFC<DrawerCompProps>  = ({metadata,metaDataList,setMetaD
       <Typography>{metadata.label}</Typography>
 
       <Divider />
+        <Viewport></Viewport>
         <Typography>Slice Range</Typography>
         <SliderComp metadata={metadata} metaDataList={metaDataList} setMetaDataList={setMetaDataList}/>
         <Typography>WW</Typography>

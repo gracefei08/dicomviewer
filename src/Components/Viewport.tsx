@@ -36,9 +36,11 @@ const state = {
       'dicomweb://s3.amazonaws.com/elasticbeanstalk-us-east-1-843279806438/dicom/production/bJiSsXVSfv_1.3.12.2.1107.5.1.4.64104.30000011091411531573400005893/203.dcm.gz'
     ],
   };
-export default function Viewport(props:any) {
-  const elementRef = useRef(null);
-  const { viewport_idx, rendering_engine } = props;
+export default function Viewport() {
+  const elementRef = useRef<HTMLDivElement>(null)
+  const elementRef2 = document.createElement('div');
+  //const { viewport_idx, rendering_engine } = props;
+  const viewport_idx  = 1;
   //const renderingEngine  = useContext(DataContext).data;
 
   const [renderingEngine,SetRenderingEngine] = useState(new cornerstone.RenderingEngine("renderingEngineId"))
@@ -52,8 +54,8 @@ export default function Viewport(props:any) {
         await cornerstone.init();
         await cornerstoneTools.init();
   
-        const renderingEngineId = 'myRenderingEngine';
-        const re = new cornerstone.RenderingEngine(renderingEngineId);
+        //const renderingEngineId = 'myRenderingEngine';
+        //const re = new cornerstone.RenderingEngine(renderingEngineId);
   
         const {
             PanTool,
@@ -81,7 +83,7 @@ export default function Viewport(props:any) {
       const viewportInput = {
         viewportId,
         type: cornerstone.Enums.ViewportType.STACK,
-        element: elementRef.current,
+        element: elementRef2,
         defaultOptions: {
 
         },
@@ -93,17 +95,19 @@ export default function Viewport(props:any) {
         renderingEngine.getViewport(viewportId)
       );
 
-      const { s, ww, wc } = renderingEngine;
+      //const { s, ww, wc } = viewport;
 
-      s.map((imageId:any) => {
+      state.imageIds.map((imageId:any) => {
         cornerstone.imageLoader.loadAndCacheImage(imageId);
       });
 
-      const stack = s;
+      const stack = state.imageIds;
+      // @ts-ignore
       await viewport.setStack(stack);
 
+      // @ts-ignore
       viewport.setProperties({
-        voiRange: cornerstone.utilities.windowLevel.toLowHighRange(ww, wc),
+        voiRange: cornerstone.utilities.windowLevel.toLowHighRange(1400, 1200),
         isComputedVOI: false,
       });
 
@@ -160,7 +164,7 @@ export default function Viewport(props:any) {
     };
     };
     console.log("mounting viewport");
-    if (viewport_data) {
+    if (state.imageIds) {
       loadImagesAndDisplay().then(() => {
         addCornerstoneTools();
       });
