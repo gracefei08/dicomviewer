@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import HeaderComp from './Components/HeaderComp';
 import Divider from '@mui/material/Divider';
+import { useContext } from 'react';
+import { DataContext } from './Context/DataContext';
 import { useChromeStorageLocal } from 'use-chrome-storage';
 import { generateMetaData, generateURL } from './utils';
 import CopyToClipboardButtonComp from './Components/CopyToClipboardButtonComp';
@@ -18,8 +20,7 @@ import { MetaData } from './utils';
 import RightDrawerComp from './Components/RightDrawerComp';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DataProvider } from './DataContext';
-
+import Viewport from './Components/Viewport';
 //@ts-ignore
 import CornerstoneViewport from 'react-cornerstone-viewport'
 //@ts-ignore
@@ -29,12 +30,13 @@ import * as cornerstone from '@cornerstonejs/core';
 //@ts-ignore
 import * as cornerstoneTools from '@cornerstonejs/tools';
 import dicomParser from 'dicom-parser';
+import { convertStackToVolumeSegmentation } from '@cornerstonejs/tools/dist/types/stateManagement/segmentation';
 
 
 
 function App() {
   const [value, setValue, isPersistent, error, isInitialStateResolved] = useChromeStorageLocal("PAC_DATA", []);
-
+  const renderingEngine  = useContext(DataContext);
   //let a = value.reduce((pS, cS) => [...pS, cS.instances.reduce((pV, cV) => [...pV, cV.url], [])], [])
   const [metaDataList, setMetaDataList] = useState<MetaData[]>([]);
   const [metaDataSelected, setMetaDataSelected] = useState<MetaData>({
@@ -70,15 +72,32 @@ const handleClick2 = () => {
   setRightDrawerState(true)
 
 }
+useEffect(() => {
+  console.log("layout rerendering")
+  const handleResize = () => {
+    
+    if (renderingEngine) renderingEngine.resize(true);
+  };
+  console.log(renderingEngine)
+  if (renderingEngine) window.addEventListener('resize', handleResize);
+  return () => {
+      window.removeEventListener('resize', handleResize);
+  };
+  
 
+}, [renderingEngine]);
 
   return (
-  <DataProvider>
+
     <DndProvider backend={HTML5Backend}>
+      <div style={{height: "400px"}}>
+      {renderingEngine?<Viewport/>:null}
       
+      </div>
     <div >
       <HeaderComp/>
       <Divider />
+      
       <Button variant="contained" disableElevation onClick={handleClick2}>Organize Layout</Button>
       {metaDataList && metaDataList.map(metadata =>
         <Card sx={{ maxWidth: 350 }}>
@@ -115,11 +134,11 @@ const handleClick2 = () => {
 
         </Card>
       )}
-   
+
     </div>
     
     </DndProvider>
-    </DataProvider>
+
   );
 }
 

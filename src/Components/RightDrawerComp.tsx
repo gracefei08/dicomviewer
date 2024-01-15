@@ -16,6 +16,7 @@ import DropComp from './DropComp';
 import { generateGridURL } from '../utils';
 
 
+
 interface DrawerCompProps {
     metadata: MetaData,
     metaDataList: MetaData[],
@@ -29,6 +30,7 @@ const RightDrawerComp: React.VFC<DrawerCompProps> = ({ metadata, metaDataList, s
     const [url, setURL] = useState<string>("Click Generate URL");
     const [rows, setRows] = useState<number>(1);
     const [cols, setCols] = useState<number>(1);
+   
 
     const addCol = () => {
         if (cols < 4) {
@@ -56,6 +58,7 @@ const RightDrawerComp: React.VFC<DrawerCompProps> = ({ metadata, metaDataList, s
 
     return (
         <div>
+              
             <Box
                 sx={{ width: 350 }}
                 role="presentation"
