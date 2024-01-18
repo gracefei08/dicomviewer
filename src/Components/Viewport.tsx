@@ -39,7 +39,7 @@ const state = {
 export default function Viewport() {
   const elementRef = useRef<HTMLDivElement>(null)
   const [test,setTest] = useState(0)
-
+  const [v,setV] = useState()
   //const { viewport_idx, rendering_engine } = props;
   const viewport_idx  = 1;
   const renderingEngine  = useContext(DataContext);
@@ -134,7 +134,7 @@ export default function Viewport() {
       });
     }
     return () => { console.log("unmounting viewport"); };
-  }, []);
+  }, [v]);
 
 
   return (
