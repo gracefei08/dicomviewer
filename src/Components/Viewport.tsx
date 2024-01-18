@@ -3,6 +3,7 @@ import React, { useRef, useContext, useEffect,useState} from 'react';
 import { DataContext } from '../Context/DataContext';
 import * as cornerstone from '@cornerstonejs/core';
 import * as cornerstoneTools from '@cornerstonejs/tools';
+import { viewport } from '@cornerstonejs/tools/dist/types/utilities';
 
 const state = {
     tools: [
@@ -37,17 +38,19 @@ const state = {
   };
 export default function Viewport() {
   const elementRef = useRef<HTMLDivElement>(null)
+  const [test,setTest] = useState(0)
 
   //const { viewport_idx, rendering_engine } = props;
   const viewport_idx  = 1;
   const renderingEngine  = useContext(DataContext);
+  const viewportId = `${viewport_idx}-vp`;
 
   //const [renderingEngine,SetRenderingEngine] = useState(new cornerstone.RenderingEngine("renderingEngineId"))
-  
+
     useEffect(() => {
     const loadImagesAndDisplay = async () => {
 
-      const viewportId = `${viewport_idx}-vp`;
+      
       const viewportInput = {
         viewportId,
         type: cornerstone.Enums.ViewportType.STACK,
@@ -80,9 +83,10 @@ export default function Viewport() {
       });
       //viewport.sWidth=300;
       //viewport.sHeight=300;
+      console.log(viewport.getZoom())
       viewport.render();
     };
-
+      
     const addCornerstoneTools = () => {
 
       const userAgent = typeof window.navigator === 'undefined' ? '' : navigator.userAgent;
@@ -98,7 +102,7 @@ export default function Viewport() {
         ToolGroupManager,
         Enums: csToolsEnums,
       } = cornerstoneTools;
-      
+     
       const { MouseBindings } = csToolsEnums;
       
       const toolGroupId = `${viewport_idx}-tl`;
@@ -137,6 +141,7 @@ export default function Viewport() {
     <>
     
       <div ref={elementRef} id={"1"} style={{ width: '100%', height: '100%' }} />
+      {test}
     </>
   );
 }
