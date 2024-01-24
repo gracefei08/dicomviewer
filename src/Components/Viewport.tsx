@@ -53,6 +53,7 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
               return {
                 ...object,
                 "wc":window.windowCenter,
+                "ww":window.windowWidth,
               }
             }
             
