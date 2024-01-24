@@ -8,7 +8,10 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { MetaData,generateURL  } from '../utils';
 import Divider from '@mui/material/Divider';
+import { useContext } from 'react';
+import { DataContext } from '../Context/DataContext';
 import Viewport from './Viewport';
+
 import CopyToClipboardButtonComp from './CopyToClipboardButtonComp';
 
 
@@ -22,6 +25,7 @@ interface DrawerCompProps {
 
 const DrawerComp: React.VFC<DrawerCompProps>  = ({metadata,metaDataList,setMetaDataList,setDrawerState}) => {
     const [url, setURL] = useState<string>("Click Generate URL");
+    const renderingEngine  = useContext(DataContext);
      
     const saveStates = ((key:string, event: React.ChangeEvent<HTMLInputElement>)=>{
         setMetaDataList([...metaDataList].map(object => {
@@ -51,7 +55,10 @@ const DrawerComp: React.VFC<DrawerCompProps>  = ({metadata,metaDataList,setMetaD
       <Typography>{metadata.label}</Typography>
 
       <Divider />
-        
+      <div style={{height: "400px"}}>
+      {renderingEngine?<Viewport/>:null}
+      
+      </div>
         <Typography>Slice Range</Typography>
         <SliderComp metadata={metadata} metaDataList={metaDataList} setMetaDataList={setMetaDataList}/>
         <Typography>WW</Typography>
