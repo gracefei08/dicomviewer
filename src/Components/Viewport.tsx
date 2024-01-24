@@ -36,33 +36,45 @@ const state = {
 
     ],
   };
+
+
 export default function Viewport() {
+  const viewportId = `${1}-vp`;
   const elementRef = useRef<HTMLDivElement>(null)
+  const viewportInput = {
+    viewportId,
+    type: cornerstone.Enums.ViewportType.STACK,
+    element: elementRef.current,
+    defaultOptions: {
+
+    },
+  };
   const [test,setTest] = useState(0)
   const [v,setV] = useState()
   //const { viewport_idx, rendering_engine } = props;
   const viewport_idx  = 1;
   const renderingEngine  = useContext(DataContext);
-  const viewportId = `${viewport_idx}-vp`;
+   // @ts-ignore
+   renderingEngine.enableElement(viewportInput);
+  
+   // @ts-ignore
+  const [viewport,SetViewport] = useState((renderingEngine.getViewport(viewportId) ))
+  //useEffect(()=>{
+    // @ts-ignore
+   // const {imageIds, voiRange, currentImageIdIndex} = viewport;
+   // const window = cornerstone.utilities.windowLevel.toWindowLevel(voiRange.lower, voiRange.upper);
+//console.log(window)
 
-  //const [renderingEngine,SetRenderingEngine] = useState(new cornerstone.RenderingEngine("renderingEngineId"))
+  //},[viewport])
 
     useEffect(() => {
     const loadImagesAndDisplay = async () => {
 
       
-      const viewportInput = {
-        viewportId,
-        type: cornerstone.Enums.ViewportType.STACK,
-        element: elementRef.current,
-        defaultOptions: {
-
-        },
-      };
-      // @ts-ignore
-      renderingEngine.enableElement(viewportInput);
+  
+     
         // @ts-ignore
-      const viewport = (renderingEngine.getViewport(viewportId) );
+      //const viewport = (renderingEngine.getViewport(viewportId) );
 
       //const { s, ww, wc } = viewport_data;
 
@@ -73,7 +85,7 @@ export default function Viewport() {
       const stack = state.imageIds;
       console.log(stack)
         // @ts-ignore
-      await viewport.setStack(stack);
+        SetViewport(viewport.setStack(stack));
 
         // @ts-ignore
       viewport.setProperties({
@@ -134,7 +146,7 @@ export default function Viewport() {
       });
     }
     return () => { console.log("unmounting viewport"); };
-  }, [v]);
+  }, [viewport]);
 
 
   return (
