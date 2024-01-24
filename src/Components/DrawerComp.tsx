@@ -55,10 +55,7 @@ const DrawerComp: React.VFC<DrawerCompProps>  = ({metadata,metaDataList,setMetaD
       <Typography>{metadata.label}</Typography>
 
       <Divider />
-      <div style={{height: "400px"}}>
-      {renderingEngine?<Viewport/>:null}
-      
-      </div>
+
         <Typography>Slice Range</Typography>
         <SliderComp metadata={metadata} metaDataList={metaDataList} setMetaDataList={setMetaDataList}/>
         <Typography>WW</Typography>

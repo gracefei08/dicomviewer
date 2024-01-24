@@ -90,6 +90,10 @@ useEffect(() => {
   return (
 
     <DndProvider backend={HTML5Backend}>
+            <div style={{height: "400px"}}>
+      {renderingEngine?<Viewport/>:null}
+      
+      </div>
     <div >
       <HeaderComp/>
       <Divider />
