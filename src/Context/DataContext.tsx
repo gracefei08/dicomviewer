@@ -10,19 +10,19 @@ import dicomParser from 'dicom-parser';
 
 //export const DataContext = createContext();    
 
-export const DataContext = createContext<cornerstone.RenderingEngine|undefined>(undefined);
+export const DataContext = createContext<cornerstone.RenderingEngine | undefined>(undefined);
 // create initial data object from URL query string
 
 
 export const DataProvider = ({ children }: PropsWithChildren<{}>) => {
     //const [data, dispatch] = useReducer(dataReducer, urlData);
-    const [renderingEngine,SetRenderingEngine] = useState<cornerstone.RenderingEngine>()
+    const [renderingEngine, SetRenderingEngine] = useState<cornerstone.RenderingEngine>()
 
     useEffect(() => {
-    
+
 
         const setupCornerstone = async () => {
-           
+
             //window.cornerstone = cornerstone;
 
             //window.cornerstoneTools = cornerstoneTools;
@@ -50,18 +50,18 @@ export const DataProvider = ({ children }: PropsWithChildren<{}>) => {
             cornerstoneTools.addTool(StackScrollMouseWheelTool);
             cornerstoneTools.addTool(ZoomTool);
             cornerstoneTools.addTool(PlanarRotateTool);
-      
+
         };
 
         setupCornerstone();
-    
+
     }, []);
 
     return (
-        
-            <DataContext.Provider value={ renderingEngine }>
-                {children}
-            </DataContext.Provider>
- 
+
+        <DataContext.Provider value={renderingEngine}>
+            {children}
+        </DataContext.Provider>
+
     );
 };

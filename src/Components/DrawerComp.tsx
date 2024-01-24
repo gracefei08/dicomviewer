@@ -1,5 +1,5 @@
 import { Button } from '@mui/material'
-import { useState } from 'react'
+import { useState,useEffect, useMemo } from 'react'
 import TextField from '@mui/material/TextField';
 import SliderComp from './SliderComp';
 import CloseIcon from '@mui/icons-material/Close';
@@ -17,19 +17,44 @@ import CopyToClipboardButtonComp from './CopyToClipboardButtonComp';
 
 
 interface DrawerCompProps {
-    metadata: MetaData,
+    metadataId: number,
   metaDataList:MetaData[],
   setMetaDataList: React.Dispatch<React.SetStateAction<MetaData[]>>,
   setDrawerState:React.Dispatch<React.SetStateAction<boolean>>
 }
+const initalValues = {
+  thumbnail:"",
+  label:"",
+  id:0,
+  modality:"",
+  prefix:"", 
+  suffix: "",
+  start_slice:0,
+  end_slice : 0,
+  ww:0,
+  wc:0,
+  ci:0,
+  z:0,
+  px:0,
+  py:0,
+  r:0,
+  pad:0,
+  cord:[-1,-1]
+}
 
-const DrawerComp: React.VFC<DrawerCompProps>  = ({metadata,metaDataList,setMetaDataList,setDrawerState}) => {
-    const [url, setURL] = useState<string>("Click Generate URL");
+const DrawerComp: React.VFC<DrawerCompProps>  = ({metadataId,metaDataList,setMetaDataList,setDrawerState}) => {
     const renderingEngine  = useContext(DataContext);
-     
+    const [metadata, setMetadata] =  useState<MetaData>(initalValues);
+    
+    useMemo(() => {
+      console.log(metaDataList.find(x => x.id ===metadataId))
+       // @ts-ignore
+      setMetadata(metaDataList.find(x => x.id ===metadataId) )
+    },[metaDataList])
+
     const saveStates = ((key:string, event: React.ChangeEvent<HTMLInputElement>)=>{
         setMetaDataList([...metaDataList].map(object => {
-            if(object.id === metadata.id) {
+            if(object.id === metadataId) {
               return {
                 ...object,
                 [key]:event.target.value
@@ -38,10 +63,8 @@ const DrawerComp: React.VFC<DrawerCompProps>  = ({metadata,metaDataList,setMetaD
             
             else return object;
           }))
-
-
-
     })
+
     return (
         <Box
         sx={{ width:400 }}
@@ -53,25 +76,29 @@ const DrawerComp: React.VFC<DrawerCompProps>  = ({metadata,metaDataList,setMetaD
         
       </IconButton>
       <Typography>{metadata.label}</Typography>
+      <div style={{height: "400px"}}>
+      {renderingEngine?<Viewport metadata={metadata} metaDataList={metaDataList} setMetaDataList ={setMetaDataList}/>:null}
+      
+      </div>
 
       <Divider />
 
         <Typography>Slice Range</Typography>
         <SliderComp metadata={metadata} metaDataList={metaDataList} setMetaDataList={setMetaDataList}/>
         <Typography>WW</Typography>
-        <TextField hiddenLabel defaultValue={metadata.ww} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("ww", e)}/>
+        <TextField hiddenLabel value={metadata.ww} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("ww", e)}/>
         <Typography>WC</Typography>
-        <TextField hiddenLabel defaultValue={metadata.wc} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("wc", e)}/>
+        <TextField hiddenLabel value={metadata.wc} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("wc", e)}/>
         <Typography>Ci</Typography>
-        <TextField hiddenLabel defaultValue={metadata.ci} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("ci", e)}/>
+        <TextField hiddenLabel value={metadata.ci} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("ci", e)}/>
         <Typography>z</Typography>
-        <TextField hiddenLabel defaultValue={metadata.z} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("z", e)}/>
+        <TextField hiddenLabel value={metadata.z} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("z", e)}/>
         <Typography>px</Typography>
-        <TextField hiddenLabel defaultValue={metadata.px} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("px", e)}/>
+        <TextField hiddenLabel value={metadata.px} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("px", e)}/>
         <Typography>py</Typography>
-        <TextField hiddenLabel defaultValue={metadata.py} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("py", e)}/>
+        <TextField hiddenLabel value={metadata.py} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("py", e)}/>
         <Typography>r</Typography>
-        <TextField hiddenLabel defaultValue={metadata.r} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("r", e)}/>
+        <TextField hiddenLabel value={metadata.r} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("r", e)}/>
 
         <Divider />
     

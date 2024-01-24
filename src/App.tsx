@@ -39,24 +39,7 @@ function App() {
   const renderingEngine  = useContext(DataContext);
   //let a = value.reduce((pS, cS) => [...pS, cS.instances.reduce((pV, cV) => [...pV, cV.url], [])], [])
   const [metaDataList, setMetaDataList] = useState<MetaData[]>([]);
-  const [metaDataSelected, setMetaDataSelected] = useState<MetaData>({
-    thumbnail:"",
-    label:"",
-    id:0,
-    modality:"",
-    prefix:"", 
-    suffix: "",
-    start_slice:0,
-    end_slice : 0,
-    ww:0,
-    wc:0,
-    ci:0,
-    z:0,
-    px:0,
-    py:0,
-    r:0,
-    cord:[-1,-1]
-  });
+  const [metaDataSelected, setMetaDataSelected] = useState(0)
   const [drawerState, setDrawerState] = useState(false);
   const [rightdrawerState, setRightDrawerState] = useState(false);
   useEffect(() => {
@@ -66,12 +49,13 @@ function App() {
 
 const handleClick = (metadata:MetaData) => {
   setDrawerState(true)
-  setMetaDataSelected(metadata)
+  setMetaDataSelected(metadata.id)
 }
 const handleClick2 = () => {
   setRightDrawerState(true)
 
 }
+/** 
 useEffect(() => {
   console.log("layout rerendering")
   const handleResize = () => {
@@ -86,14 +70,11 @@ useEffect(() => {
   
 
 }, [renderingEngine]);
-
+*/
   return (
 
     <DndProvider backend={HTML5Backend}>
-            <div style={{height: "400px"}}>
-      {renderingEngine?<Viewport/>:null}
-      
-      </div>
+
     <div >
       <HeaderComp/>
       <Divider />
@@ -118,7 +99,7 @@ useEffect(() => {
             open={drawerState}
             onClose={()=>setDrawerState(false)}
           >
-            <DrawerComp setDrawerState ={setDrawerState} metadata={metaDataSelected} metaDataList={metaDataList} setMetaDataList={setMetaDataList}/>
+            <DrawerComp setDrawerState ={setDrawerState} metadataId={metaDataSelected} metaDataList={metaDataList} setMetaDataList={setMetaDataList}/>
            
           </Drawer>
 
@@ -127,7 +108,7 @@ useEffect(() => {
             open={rightdrawerState}
             onClose={()=>setRightDrawerState(false)}
           >
-            <RightDrawerComp setDrawerState ={setRightDrawerState} metadata={metaDataSelected} metaDataList={metaDataList} setMetaDataList={setMetaDataList}/>
+            <RightDrawerComp setDrawerState ={setRightDrawerState} metadataId={metaDataSelected} metaDataList={metaDataList} setMetaDataList={setMetaDataList}/>
            
           </Drawer>
 

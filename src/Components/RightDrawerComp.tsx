@@ -17,8 +17,8 @@ import { generateGridURL } from '../utils';
 
 
 
-interface DrawerCompProps {
-    metadata: MetaData,
+interface RidgeDrawerCompProps {
+    metadataId: number,
     metaDataList: MetaData[],
     setMetaDataList: React.Dispatch<React.SetStateAction<MetaData[]>>,
     setDrawerState: React.Dispatch<React.SetStateAction<boolean>>
@@ -26,7 +26,7 @@ interface DrawerCompProps {
 
 
 
-const RightDrawerComp: React.VFC<DrawerCompProps> = ({ metadata, metaDataList, setMetaDataList, setDrawerState }) => {
+const RightDrawerComp: React.VFC<RidgeDrawerCompProps> = ({ metadataId, metaDataList, setMetaDataList, setDrawerState }) => {
     const [url, setURL] = useState<string>("Click Generate URL");
     const [rows, setRows] = useState<number>(1);
     const [cols, setCols] = useState<number>(1);

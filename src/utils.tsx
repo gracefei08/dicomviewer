@@ -20,6 +20,7 @@ export interface MetaData {
   px:number,
   py:number,
   r:number,
+  pad:number
   cord:number[]
 }
 
@@ -67,6 +68,7 @@ export function generateMetaData(list:Array<rawMetaData>) {
         px:0,
         py:0,
         r:0,
+        pad: String(x.images.length).length,
         cord:[-1,-1]
       }));
     return objs
@@ -108,8 +110,8 @@ export function generateGridURL(metaDataList:MetaData[],row:number,col:number){
       let value = (((data.cord[0]+1)+(col*(data.cord[1])))-1).toString()
     URL_genereated.searchParams.append("vd."+value+".s.pf", encodeURI("dicomweb:"+data.prefix));
     URL_genereated.searchParams.append("vd."+value+".s.sf", data.suffix);
-    URL_genereated.searchParams.append("vd."+value+".s.s", String(data.start_slice).padStart(3, '0'));
-    URL_genereated.searchParams.append("vd."+value+".s.e",String(data.end_slice).padStart(3, '0'));
+    URL_genereated.searchParams.append("vd."+value+".s.s", String(data.start_slice).padStart(data.pad, '0'));
+    URL_genereated.searchParams.append("vd."+value+".s.e",String(data.end_slice).padStart(data.pad, '0'));
     URL_genereated.searchParams.append("vd."+value+".ww", data.ww.toString());
     URL_genereated.searchParams.append("vd."+value+".wc", data.wc.toString());
   
@@ -127,6 +129,29 @@ export function generateGridURL(metaDataList:MetaData[],row:number,col:number){
   return URL_genereated.href
 
 
+}
+
+function recreateVariableStringList(start_str:string, end_str:string) {
+  const start = parseInt(start_str, 10);
+  const end = parseInt(end_str, 10);
+  const length = start_str.length;
+
+  // Generate the list programmatically
+  const generatedList = [];
+  for (let i = start; i <= end; i++) {
+      let numStr = i.toString();
+      while (numStr.length < length) {
+          numStr = '0' + numStr;
+      }
+      generatedList.push(numStr);
+  }
+
+  return generatedList;
+}
+
+export function recreateUriStringList(prefix:string, suffix:string, start_str:number, end_str:number,pad:number) {
+  const variableStringList = recreateVariableStringList( String(start_str).padStart(pad, '0'), String(end_str).padStart(pad, '0'));
+  return variableStringList.map(str => "dicomweb:"+prefix + str + suffix);
 }
 /**"https://s3.amazonaws.com/elasticbeanstalk-us-east-1-843279806438/dicom/production/-ywXf2R16d_1.3.12.2.1107.5.1.4.73513.30000019073108281347500001430/1.dcm.gz"
 "https://s3.amazonaws.com/elasticbeanstalk-us-east-1-843279806438/dicom/production/-ywXf2R16d_1.3.12.2.1107.5.1.4.73513.30000019073110243989500021595/001.dcm.gz"
