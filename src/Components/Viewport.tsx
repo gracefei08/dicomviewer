@@ -43,7 +43,7 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
       if (renderingEngine) {
         renderingEngine.enableElement(viewportInput);
         const viewport = (renderingEngine.getViewport(viewportId) as cornerstone.StackViewport);
-        viewport.element.addEventListener('click', ()=>{
+        viewport.element.addEventListener('mousemove', ()=>{
           const vp = (renderingEngine.getViewport(viewportId) as cornerstone.StackViewport);
           //@ts-ignore
           const window = cornerstone.utilities.windowLevel.toWindowLevel(vp.voiRange.lower, vp.voiRange.upper);
