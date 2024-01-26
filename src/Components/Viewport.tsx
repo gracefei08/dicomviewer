@@ -37,10 +37,10 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
           ...object,
           "wc":window.windowCenter,
           "ww":window.windowWidth,
-          "ci":vp.getCurrentImageIdIndex(),
+          "ci":Math.min(metadata.start_slice,vp.getCurrentImageIdIndex()),
           "z":vp.getZoom(),
-          "px":x,
-          "py":y
+          "px":String(x),
+          "py":String(y)
         }
       }
       
@@ -72,9 +72,9 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
         });
 
 
-        await viewport.setStack(stack,metadata.ci)
+        await viewport.setStack(stack.slice(metadata.start_slice,metadata.end_slice),metadata.ci)
         viewport.setZoom(metadata.z)
-        viewport.setPan([metadata.px,metadata.py])
+        viewport.setPan([Number(metadata.px),Number(metadata.py)])
         //await viewport.setImageIdIndex(metadata.ci)
         // @ts-ignore
         //SetViewport(await viewport.setStack(state.imageIds));
@@ -141,17 +141,19 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
 
   useEffect(()=>{
     const update = async () => {
-    if (renderingEngine  && stateFlag){
+    if (renderingEngine && stateFlag){
     const viewport = (renderingEngine.getViewport(viewportId) as cornerstone.StackViewport);
     //await viewport.setImageIdIndex(metadata.ci)
-    //await viewport.setStack(stack,metadata.ci)
+    await viewport.setStack(stack.slice(metadata.start_slice,metadata.end_slice))
     viewport.setZoom(metadata.z)
     viewport.setProperties({
       voiRange: cornerstone.utilities.windowLevel.toLowHighRange(metadata.ww, metadata.wc),
       isComputedVOI: false,
 
     });
-    viewport.setPan([metadata.px,metadata.py])
+
+    viewport.setPan([metadata.px==="-"?0:Number(metadata.px),metadata.py==="-"?0:Number(metadata.py)])
+ 
     viewport.render()
     setStateFlag(false)
     }

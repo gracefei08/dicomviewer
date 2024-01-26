@@ -9,9 +9,11 @@ interface SliderProps {
   metadata: MetaData,
   metaDataList:MetaData[],
   setMetaDataList: React.Dispatch<React.SetStateAction<MetaData[]>>,
+  stateFlag:boolean,
+  setStateFlag:React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-const SliderComp: React.VFC<SliderProps> = ({metadata,metaDataList,setMetaDataList}) => {
+const SliderComp: React.VFC<SliderProps> = ({metadata,metaDataList,setMetaDataList,setStateFlag}) => {
   const [max, setMax] =  React.useState<number>(metadata.end_slice);
   const [value, setValue] = React.useState<number[]>([metadata.start_slice, metadata.end_slice]);
 
@@ -53,6 +55,7 @@ const SliderComp: React.VFC<SliderProps> = ({metadata,metaDataList,setMetaDataLi
         else return object;
       }))
     }
+    setStateFlag(true)
   };
 
   return (

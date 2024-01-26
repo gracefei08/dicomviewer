@@ -35,8 +35,8 @@ const initalValues = {
   wc:0,
   ci:0,
   z:0,
-  px:0,
-  py:0,
+  px:"0",
+  py:"0",
   r:0,
   pad:0,
   cord:[-1,-1]
@@ -53,6 +53,7 @@ const DrawerComp: React.VFC<DrawerCompProps>  = ({metadataId,metaDataList,setMet
 
     const saveStates = ((key:string, event: React.ChangeEvent<HTMLInputElement>)=>{
         setStateFlag(true)
+    
         setMetaDataList([...metaDataList].map(object => {
             if(object.id === metadataId) {
               return {
@@ -76,7 +77,7 @@ const DrawerComp: React.VFC<DrawerCompProps>  = ({metadataId,metaDataList,setMet
         
       </IconButton>
       <Typography>{metadata.label}</Typography>
-      <div style={{height: "400px", width:"380px"}}>
+      <div style={{height: "400px", width:"375px"}}>
       {renderingEngine?<Viewport metadata={metadata} metaDataList={metaDataList} setMetaDataList ={setMetaDataList} stateFlag={stateFlag} setStateFlag={setStateFlag}/>:null}
       
       </div>
@@ -84,7 +85,7 @@ const DrawerComp: React.VFC<DrawerCompProps>  = ({metadataId,metaDataList,setMet
       <Divider />
 
         <Typography>Slice Range</Typography>
-        <SliderComp metadata={metadata} metaDataList={metaDataList} setMetaDataList={setMetaDataList}/>
+        <SliderComp metadata={metadata} metaDataList={metaDataList} setMetaDataList={setMetaDataList} stateFlag={stateFlag} setStateFlag={setStateFlag}/>
         <Typography>WW</Typography>
         <TextField hiddenLabel value={metadata.ww} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("ww", e)}/>
         <Typography>WC</Typography>

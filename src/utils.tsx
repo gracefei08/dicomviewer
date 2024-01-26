@@ -17,8 +17,8 @@ export interface MetaData {
   wc:number,
   ci:number,
   z:number,
-  px:number,
-  py:number,
+  px:string,
+  py:string,
   r:number,
   pad:number
   cord:number[]
@@ -65,8 +65,8 @@ export function generateMetaData(list:Array<rawMetaData>) {
         wc:1200,
         ci:0,
         z:1,
-        px:0,
-        py:0,
+        px:"0",
+        py:"0",
         r:0,
         pad: String(x.images.length).length,
         cord:[-1,-1]
