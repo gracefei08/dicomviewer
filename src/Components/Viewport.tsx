@@ -11,9 +11,11 @@ interface ViewportProps {
   metadata: MetaData,
   metaDataList:MetaData[],
   setMetaDataList: React.Dispatch<React.SetStateAction<MetaData[]>>,
+  stateFlag:boolean,
+  setStateFlag:React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataList}) => {
+const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataList,stateFlag,setStateFlag}) => {
 
 
   const [stack,setStack] = useState<string[]>(recreateUriStringList(metadata.prefix,metadata.suffix,metadata.start_slice,metadata.end_slice,metadata.pad))
@@ -70,8 +72,10 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
         });
 
 
-        await viewport.setStack(stack)
-        await viewport.setImageIdIndex(metadata.ci)
+        await viewport.setStack(stack,metadata.ci)
+        viewport.setZoom(metadata.z)
+        viewport.setPan([metadata.px,metadata.py])
+        //await viewport.setImageIdIndex(metadata.ci)
         // @ts-ignore
         //SetViewport(await viewport.setStack(state.imageIds));
         viewport.setProperties({
@@ -137,20 +141,28 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
 
   useEffect(()=>{
     const update = async () => {
-    if (renderingEngine){
+    if (renderingEngine  && stateFlag){
     const viewport = (renderingEngine.getViewport(viewportId) as cornerstone.StackViewport);
-    await viewport.setImageIdIndex(metadata.ci)
+    //await viewport.setImageIdIndex(metadata.ci)
+    //await viewport.setStack(stack,metadata.ci)
+    viewport.setZoom(metadata.z)
+    viewport.setProperties({
+      voiRange: cornerstone.utilities.windowLevel.toLowHighRange(metadata.ww, metadata.wc),
+      isComputedVOI: false,
 
-
+    });
+    viewport.setPan([metadata.px,metadata.py])
+    viewport.render()
+    setStateFlag(false)
     }
   }
   update()
 
-  },[metadata])
+  },[metaDataList])
  
   return (
     <>
-      <div ref={elementRef} id={viewportId} style={{ width: '100%', height: '100%' }} />
+      <div ref={elementRef} id={viewportId} style={{ width: '100%', height: '100%'}} />
     </>
   );
 }
