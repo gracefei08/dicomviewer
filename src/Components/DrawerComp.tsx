@@ -47,7 +47,6 @@ const DrawerComp: React.VFC<DrawerCompProps>  = ({metadataId,metaDataList,setMet
     const [metadata, setMetadata] =  useState<MetaData>(initalValues);
     
     useMemo(() => {
-      console.log(metaDataList.find(x => x.id ===metadataId))
        // @ts-ignore
       setMetadata(metaDataList.find(x => x.id ===metadataId) )
     },[metaDataList])
@@ -101,14 +100,6 @@ const DrawerComp: React.VFC<DrawerCompProps>  = ({metadataId,metaDataList,setMet
         <TextField hiddenLabel value={metadata.r} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("r", e)}/>
 
         <Divider />
-    
-    {/** 
-        <Button variant="contained" onClick = {()=>setURL(generateURL((metaDataList.filter(function(element){ return element.id>= metadata.id; }))[0]))}>Generate URL</Button>
-    
-      
-          {url }
-          
-          <CopyToClipboardButtonComp url={url}/>*/}
         
     
     </Box>

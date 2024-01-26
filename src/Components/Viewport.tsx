@@ -16,17 +16,36 @@ interface ViewportProps {
 const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataList}) => {
 
 
-  const stack = recreateUriStringList(metadata.prefix,metadata.suffix,metadata.start_slice,metadata.end_slice,metadata.pad)
+  const [stack,setStack] = useState<string[]>(recreateUriStringList(metadata.prefix,metadata.suffix,metadata.start_slice,metadata.end_slice,metadata.pad))
   //const viewportId = String(metadata.id);
   const viewportId = `${String(metadata.id)}-vp`;
   const elementRef = useRef<HTMLDivElement>(null)
   //const { viewport_idx, rendering_engine } = props;
   const renderingEngine = useContext(DataContext);
 
-
-  // @ts-ignore
-  const [viewport2, SetViewport2] = useState<cornerstone.StackViewport>()
-
+  const updateStates =  (_event:Event)=>{
+    if (renderingEngine){
+    const vp = (renderingEngine.getViewport(viewportId) as cornerstone.StackViewport);
+    //@ts-ignore
+    const window = cornerstone.utilities.windowLevel.toWindowLevel(vp.voiRange.lower, vp.voiRange.upper);
+    const [x,y] =vp.getPan()
+    setMetaDataList([...metaDataList].map(object => {
+      if(object.id === metadata.id) {
+        return {
+          ...object,
+          "wc":window.windowCenter,
+          "ww":window.windowWidth,
+          "ci":vp.getCurrentImageIdIndex(),
+          "z":vp.getZoom(),
+          "px":x,
+          "py":y
+        }
+      }
+      
+      else return object;
+    }))
+  }
+  }
 
   useEffect(() => {
 
@@ -43,34 +62,20 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
       if (renderingEngine) {
         renderingEngine.enableElement(viewportInput);
         const viewport = (renderingEngine.getViewport(viewportId) as cornerstone.StackViewport);
-        viewport.element.addEventListener('mousemove', ()=>{
-          const vp = (renderingEngine.getViewport(viewportId) as cornerstone.StackViewport);
-          //@ts-ignore
-          const window = cornerstone.utilities.windowLevel.toWindowLevel(vp.voiRange.lower, vp.voiRange.upper);
-
-          setMetaDataList([...metaDataList].map(object => {
-            if(object.id === metadata.id) {
-              return {
-                ...object,
-                "wc":window.windowCenter,
-                "ww":window.windowWidth,
-              }
-            }
-            
-            else return object;
-          }))
-          
-        })
+        viewport.element.addEventListener('mousemove',updateStates)
+        viewport.element.addEventListener('wheel',updateStates)
+  
         stack.map((imageId: string) => {
           cornerstone.imageLoader.loadAndCacheImage(imageId);
         });
 
 
         await viewport.setStack(stack)
+        await viewport.setImageIdIndex(metadata.ci)
         // @ts-ignore
         //SetViewport(await viewport.setStack(state.imageIds));
         viewport.setProperties({
-          voiRange: cornerstone.utilities.windowLevel.toLowHighRange(1000, 1200),
+          voiRange: cornerstone.utilities.windowLevel.toLowHighRange(metadata.ww, metadata.wc),
           isComputedVOI: false,
 
         });
@@ -130,7 +135,19 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
     return () => { console.log("unmounting viewport"); };
   }, []);
 
+  useEffect(()=>{
+    const update = async () => {
+    if (renderingEngine){
+    const viewport = (renderingEngine.getViewport(viewportId) as cornerstone.StackViewport);
+    await viewport.setImageIdIndex(metadata.ci)
 
+
+    }
+  }
+  update()
+
+  },[metadata])
+ 
   return (
     <>
       <div ref={elementRef} id={viewportId} style={{ width: '100%', height: '100%' }} />
