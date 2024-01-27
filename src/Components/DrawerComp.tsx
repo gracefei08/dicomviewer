@@ -46,9 +46,13 @@ const DrawerComp: React.VFC<DrawerCompProps>  = ({metadataId,metaDataList,setMet
     const renderingEngine  = useContext(DataContext);
     const [metadata, setMetadata] =  useState<MetaData>(initalValues);
     const [stateFlag, setStateFlag] =  useState(false);
-    useMemo(() => {
+    const [isLoading, setIsLoading] = useState(true)
+    useEffect(() => {
+      if(isLoading){
        // @ts-ignore
-      setMetadata(metaDataList.find(x => x.id ===metadataId) )
+      setMetadata(metaDataList.find(x => x.id ===metadataId) 
+    }
+    setIsLoading(false)
     },[metaDataList])
 
     const saveStates = ((key:string, event: React.ChangeEvent<HTMLInputElement>)=>{
@@ -93,7 +97,7 @@ const DrawerComp: React.VFC<DrawerCompProps>  = ({metadataId,metaDataList,setMet
       </IconButton>
       <Typography>{metadata.label}</Typography>
       <div style={{height: "400px", width:"375px"}}>
-      {renderingEngine?<Viewport metadata={metadata} metaDataList={metaDataList} setMetaDataList ={setMetaDataList} stateFlag={stateFlag} setStateFlag={setStateFlag}/>:null}
+      {(renderingEngine&&!isLoading)?<Viewport metadata={metadata} metaDataList={metaDataList} setMetaDataList ={setMetaDataList} stateFlag={stateFlag} setStateFlag={setStateFlag}/>:null}
       
       </div>
 
