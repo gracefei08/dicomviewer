@@ -1,28 +1,35 @@
-import { useState,useEffect,  } from 'react'
+import { useState,useEffect,useMemo,useContext  } from 'react'
+import { MetaDataListContext } from '../Context/DataContext';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
-import { MetaData } from '../utils';
+import { MetaData,initalValues} from '../utils';
 
-const minDistance = 1;
+const minDistance = 10;
 
 interface SliderProps {
-  metadata: MetaData,
-  metaDataList:MetaData[],
-  setMetaDataList: React.Dispatch<React.SetStateAction<MetaData[]>>,
+  metadataId: number,
+
   stateFlag:boolean,
   setStateFlag:React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-const SliderComp: React.VFC<SliderProps> = ({metadata,metaDataList,setMetaDataList,setStateFlag}) => {
-  const [max, setMax] =  useState<number>(metadata.end_slice);
-
-  const [value, setValue] = useState<number[]>([metadata.start_slice, metadata.end_slice]);
+const SliderComp: React.VFC<SliderProps> = ({metadataId,setStateFlag}) => {
+  
+  const {metaDataList,setMetaDataList}  = useContext(MetaDataListContext);
+  //const [value, setValue] = useState<number[]>([metadata.start_slice, metadata.end_slice]);
 
   //useEffect(()=>{
-
-   // setValue([metadata.start_slice, metadata.end_slice])
+  //  console.log('meta',metadata)
+   //setValue([metadata.start_slice, metadata.end_slice])
 
   //},[metaDataList])
+  const [max, setMax] =  useState<number>(0);
+  const [metadata, setMetadata] =  useState<MetaData>(initalValues);
+  useMemo(() => {
+    // @ts-ignore
+    setMetadata(metaDataList.find(x => x.id ===metadataId))
+    setMax(metadata.max_slice)
+},[metaDataList])
 
   const handleChange1 = (
     event: Event,
@@ -34,17 +41,17 @@ const SliderComp: React.VFC<SliderProps> = ({metadata,metaDataList,setMetaDataLi
     }
     setStateFlag(true)
     
-    let [temp1,temp2] = value
+    let [temp1,temp2] =  [metadata.start_slice,metadata.end_slice]
     if (activeThumb === 0) {
-      setValue([Math.min(newValue[0], temp2 - minDistance), temp2]);
-      console.log('starting',Math.min(newValue[0], temp2 - minDistance))
+      //setValue([Math.min(newValue[0], temp2 - minDistance), temp2]);
+      //console.log('starting',Math.min(newValue[0], temp2 - minDistance))
       setMetaDataList([...metaDataList].map(object => {
-        if(object.id === metadata.id) {
+        if(object.id === metadataId) {
           return {
             ...object,
-            start_slice: Math.min(newValue[0], temp2 - minDistance),
-            end_slice:temp2,
-            ci: Math.max(metadata.ci, Math.min(newValue[0], temp2 - minDistance))
+            start_slice: Math.min(newValue[0], metadata.end_slice - minDistance),
+            end_slice:metadata.end_slice,
+            ci: Math.max(metadata.ci, Math.min(newValue[0], metadata.end_slice - minDistance))
           }
         }
         
@@ -52,14 +59,14 @@ const SliderComp: React.VFC<SliderProps> = ({metadata,metaDataList,setMetaDataLi
       }))
 
     } else {
-      setValue([temp1, Math.max(newValue[1], temp1 + minDistance)]);
+      //setValue([temp1, Math.max(newValue[1], temp1 + minDistance)]);
       setMetaDataList([...metaDataList].map(object => {
-        if(object.id === metadata.id) {
+        if(object.id === metadataId) {
           return {
             ...object,
-            start_slice: temp1,
-            end_slice: Math.max(newValue[1], temp1 + minDistance),
-            ci: Math.min(metadata.ci, Math.max(newValue[1], temp1 + minDistance))
+            start_slice: metadata.start_slice,
+            end_slice: Math.max(newValue[1], metadata.start_slice + minDistance),
+            ci: Math.min(metadata.ci, Math.max(newValue[1], metadata.start_slice + minDistance))
           }
         }
         else return object;

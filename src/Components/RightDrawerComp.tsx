@@ -31,7 +31,7 @@ const RightDrawerComp: React.VFC<RidgeDrawerCompProps> = ({ metadataId, metaData
     const [rows, setRows] = useState<number>(1);
     const [cols, setCols] = useState<number>(1);
    
-
+    //console.log(metaDataList)
     const addCol = () => {
         if (cols < 4) {
             setCols(cols + 1)

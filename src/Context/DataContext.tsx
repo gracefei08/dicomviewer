@@ -1,23 +1,31 @@
-import { createContext, useState, useEffect, useReducer } from "react";
+import { createContext, useState, useEffect,  } from "react";
 import { ContextType } from "react";
 import { PropsWithChildren } from "react";
 import * as cornerstone from '@cornerstonejs/core';
 import * as cornerstoneTools from '@cornerstonejs/tools';
+import { useChromeStorageLocal } from 'use-chrome-storage';
 
 //@ts-ignore
 import cornerstoneDICOMImageLoader from '@cornerstonejs/dicom-image-loader';
 import dicomParser from 'dicom-parser';
+import { generateMetaData, generateURL,MetaData } from '../utils';
 
 //export const DataContext = createContext();    
-
-export const DataContext = createContext<cornerstone.RenderingEngine | undefined>(undefined);
+interface MetaDataListContextProp {
+    metaDataList:MetaData[],
+    setMetaDataList: React.Dispatch<React.SetStateAction<MetaData[]>>,
+  };
+  
+export const RenderEngineContext = createContext<cornerstone.RenderingEngine | undefined>(undefined);
+export const MetaDataListContext = createContext<MetaDataListContextProp>({metaDataList:[],setMetaDataList:()=>{}});
 // create initial data object from URL query string
 
 
 export const DataProvider = ({ children }: PropsWithChildren<{}>) => {
     //const [data, dispatch] = useReducer(dataReducer, urlData);
+    const [metaDataList, setMetaDataList] = useState<MetaData[]>([]);
     const [renderingEngine, SetRenderingEngine] = useState<cornerstone.RenderingEngine>()
-
+    const [value, setValue, isPersistent, error, isInitialStateResolved] = useChromeStorageLocal("PAC_DATA", []);
     useEffect(() => {
 
 
@@ -56,12 +64,17 @@ export const DataProvider = ({ children }: PropsWithChildren<{}>) => {
         setupCornerstone();
 
     }, []);
+    useEffect(() => {
+        setMetaDataList(generateMetaData(value))
+    }, [value])
 
     return (
 
-        <DataContext.Provider value={renderingEngine}>
-            {children}
-        </DataContext.Provider>
+        <RenderEngineContext.Provider value={renderingEngine}>
+         <MetaDataListContext.Provider value={{metaDataList,setMetaDataList}}>
+                {children}
+            </MetaDataListContext.Provider>
+        </RenderEngineContext.Provider>
 
     );
 };

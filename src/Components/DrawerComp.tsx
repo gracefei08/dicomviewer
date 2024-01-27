@@ -1,15 +1,16 @@
 import { Button } from '@mui/material'
 import { useState,useEffect, useMemo } from 'react'
+import { MetaDataListContext } from '../Context/DataContext';
 import TextField from '@mui/material/TextField';
 import SliderComp from './SliderComp';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { MetaData,generateURL  } from '../utils';
+import { MetaData,generateURL,initalValues  } from '../utils';
 import Divider from '@mui/material/Divider';
 import { useContext } from 'react';
-import { DataContext } from '../Context/DataContext';
+import { RenderEngineContext } from '../Context/DataContext';
 import Viewport from './Viewport';
 
 import CopyToClipboardButtonComp from './CopyToClipboardButtonComp';
@@ -18,43 +19,20 @@ import CopyToClipboardButtonComp from './CopyToClipboardButtonComp';
 
 interface DrawerCompProps {
     metadataId: number,
-  metaDataList:MetaData[],
-  setMetaDataList: React.Dispatch<React.SetStateAction<MetaData[]>>,
   setDrawerState:React.Dispatch<React.SetStateAction<boolean>>
 }
-const initalValues = {
-  thumbnail:"",
-  label:"",
-  id:0,
-  modality:"",
-  prefix:"", 
-  suffix: "",
-  start_slice:1,
-  end_slice : 0,
-  ww:0,
-  wc:0,
-  ci:1,
-  z:0,
-  px:"0",
-  py:"0",
-  r:0,
-  pad:0,
-  cord:[-1,-1]
-}
 
-const DrawerComp: React.VFC<DrawerCompProps>  = ({metadataId,metaDataList,setMetaDataList,setDrawerState}) => {
-    const renderingEngine  = useContext(DataContext);
+
+const DrawerComp: React.VFC<DrawerCompProps>  = ({metadataId,setDrawerState}) => {
     const [metadata, setMetadata] =  useState<MetaData>(initalValues);
     const [stateFlag, setStateFlag] =  useState(false);
-    const [isLoading, setIsLoading] = useState(true)
-    useEffect(() => {
-      if(isLoading){
-       // @ts-ignore
-      setMetadata(metaDataList.find(x => x.id ===metadataId) 
-    }
-    setIsLoading(false)
+    const {metaDataList,setMetaDataList}  = useContext(MetaDataListContext);
+    //console.log(metaDataList)
+    
+    useMemo(() => {
+        // @ts-ignore
+        setMetadata(metaDataList.find(x => x.id ===metadataId))
     },[metaDataList])
-
     const saveStates = ((key:string, event: React.ChangeEvent<HTMLInputElement>)=>{
         setStateFlag(true)
        
@@ -97,14 +75,14 @@ const DrawerComp: React.VFC<DrawerCompProps>  = ({metadataId,metaDataList,setMet
       </IconButton>
       <Typography>{metadata.label}</Typography>
       <div style={{height: "400px", width:"375px"}}>
-      {(renderingEngine&&!isLoading)?<Viewport metadata={metadata} metaDataList={metaDataList} setMetaDataList ={setMetaDataList} stateFlag={stateFlag} setStateFlag={setStateFlag}/>:null}
+      <Viewport metadataId={metadata.id} stateFlag={stateFlag} setStateFlag={setStateFlag}/>
       
       </div>
 
       <Divider />
 
         <Typography>Slice Range</Typography>
-        <div style={{display: 'flex', marginLeft: "20px"}}><SliderComp metadata={metadata} metaDataList={metaDataList} setMetaDataList={setMetaDataList} stateFlag={stateFlag} setStateFlag={setStateFlag}/></div>
+        <div style={{display: 'flex', marginLeft: "20px"}}><SliderComp metadataId={metadata.id} stateFlag={stateFlag} setStateFlag={setStateFlag}/></div>
         <Typography>WW</Typography>
         <TextField hiddenLabel value={metadata.ww} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("ww", e)}/>
         <Typography>WC</Typography>

@@ -13,6 +13,7 @@ export interface MetaData {
   suffix: string,
   start_slice:number,
   end_slice : number,
+  max_slice:number
   ww:number,
   wc:number,
   ci:number,
@@ -24,7 +25,26 @@ export interface MetaData {
   cord:number[]
 }
 
-
+export const initalValues = {
+  thumbnail:"",
+  label:"",
+  id:0,
+  modality:"",
+  prefix:"", 
+  suffix: "",
+  start_slice:1,
+  end_slice : 0,
+  ww:0,
+  wc:0,
+  ci:1,
+  z:0,
+  px:"0",
+  max_slice:0,
+  py:"0",
+  r:0,
+  pad:0,
+  cord:[-1,-1]
+}
 
 function longestCommonPrefix(strs:Array<string>) {
   if (strs.length === 0) return "";
@@ -61,6 +81,7 @@ export function generateMetaData(list:Array<rawMetaData>) {
         suffix: longestCommonSuffix(x.images),
         start_slice:1,
         end_slice : x.images.length,
+        max_slice : x.images.length,
         ww:1400,
         wc:1200,
         ci:1,

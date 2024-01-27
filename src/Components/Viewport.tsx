@@ -1,47 +1,39 @@
 import React, { useRef, useContext, useEffect, useState,useMemo } from 'react';
 
-import { DataContext } from '../Context/DataContext';
+import { RenderEngineContext } from '../Context/DataContext';
 import * as cornerstone from '@cornerstonejs/core';
 import * as cornerstoneTools from '@cornerstonejs/tools';
 import { viewport } from '@cornerstonejs/tools/dist/types/utilities';
-import { MetaData,generateURL,recreateUriStringList  } from '../utils';
+import { MetaData,generateURL,recreateUriStringList,initalValues  } from '../utils';
+import { MetaDataListContext } from '../Context/DataContext';
 
 
 interface ViewportProps {
-  metadata: MetaData,
-  metaDataList:MetaData[],
-  setMetaDataList: React.Dispatch<React.SetStateAction<MetaData[]>>,
+  metadataId: number,
   stateFlag:boolean,
   setStateFlag:React.Dispatch<React.SetStateAction<boolean>>,
 }
-const initalValues = {
-  thumbnail:"",
-  label:"",
-  id:0,
-  modality:"",
-  prefix:"", 
-  suffix: "",
-  start_slice:1,
-  end_slice : 0,
-  ww:0,
-  wc:0,
-  ci:1,
-  z:0,
-  px:"0",
-  py:"0",
-  r:0,
-  pad:0,
-  cord:[-1,-1]
-}
-const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataList,stateFlag,setStateFlag}) => {
-  
 
-  const stack=(recreateUriStringList(metadata.prefix,metadata.suffix,metadata.start_slice,metadata.end_slice,metadata.pad))
+const Viewport: React.VFC<ViewportProps>  = ({metadataId,stateFlag,setStateFlag}) => {
+  const {metaDataList,setMetaDataList}  = useContext(MetaDataListContext);
+  const refValue = useRef(metaDataList);
+  const [metadata, setMetadata] =  useState<MetaData>(initalValues);
+  useMemo(() => {
+
+    // @ts-ignore
+    setMetadata(metaDataList.find(x => x.id ===metadataId))
+   
+},[metaDataList])
+
+useEffect(() => {
+  refValue.current = metaDataList;
+});
+  const stack=recreateUriStringList(metadata.prefix,metadata.suffix,metadata.start_slice,metadata.end_slice,metadata.pad)
   //const viewportId = String(metadata.id);
   const viewportId = `${String(metadata.id)}-vp`;
   const elementRef = useRef<HTMLDivElement>(null)
   //const { viewport_idx, rendering_engine } = props;
-  const renderingEngine = useContext(DataContext);
+  const renderingEngine = useContext(RenderEngineContext);
 
   const updateStates =  (_event:Event)=>{
     if (renderingEngine){
@@ -49,14 +41,14 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
     //@ts-ignoreS
     const window = cornerstone.utilities.windowLevel.toWindowLevel(vp.voiRange.lower, vp.voiRange.upper);
     const [x,y] =vp.getPan()
-    console.log('uupdate stas',vp.getCurrentImageIdIndex(),metadata)
-    setMetaDataList([...metaDataList].map(object => {
+    
+    //console.log('uupdate stas',vp.getCurrentImageIdIndex(),metadata)
+    setMetaDataList([...refValue.current].map(object => {
       if(object.id === metadata.id) {
         return {
           ...object,
           "wc":window.windowCenter,
           "ww":window.windowWidth,
-   
           "ci":vp.getCurrentImageIdIndex()+metadata.start_slice,
           "z":vp.getZoom(),
           "px":String(x),
@@ -69,6 +61,7 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
   }
   }
 
+
   useEffect(() => {
 
     const viewportInput = {
@@ -76,10 +69,8 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
       type: cornerstone.Enums.ViewportType.STACK,
       element: elementRef.current as HTMLInputElement,
       defaultOptions: {
-
       },
-    };    
-    console.log('first', metadata)
+    };  
 
     const loadImagesAndDisplay = async () => {
       if (renderingEngine) {
@@ -92,9 +83,8 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
           cornerstone.imageLoader.loadAndCacheImage(imageId);
         });
 
-        console.log(metadata.ci,metadata.start_slice)
         //await viewport.setStack(stack.slice(metadata.start_slice,metadata.end_slice),metadata.ci-metadata.start_slice+1)]
-        await viewport.setStack(stack,metadata.ci-metadata.start_slice+1)
+        await viewport.setStack(stack.slice(0,metadata.end_slice),metadata.ci-metadata.start_slice+1)
         viewport.setZoom(metadata.z)
         viewport.setPan([Number(metadata.px),Number(metadata.py)])
         //await viewport.setImageIdIndex(metadata.ci)
@@ -116,10 +106,6 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
     };
 
     const addCornerstoneTools = () => {
-
-      //const userAgent = typeof window.navigator === 'undefined' ? '' : navigator.userAgent;
-      //const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
-
       const {
         PanTool,
         WindowLevelTool,
@@ -156,6 +142,7 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
     if (renderingEngine) {
       loadImagesAndDisplay().then(() => {
         addCornerstoneTools();
+    
       });
     }
     return () => { console.log("unmounting viewport"); };
@@ -163,13 +150,16 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
 
   useEffect(()=>{
     const update = async () => {
-    if (renderingEngine && stateFlag){
+    //@ts-ignoreS
     const viewport = (renderingEngine.getViewport(viewportId) as cornerstone.StackViewport);
+    
+    if (viewport &&stateFlag){
+   
     //await viewport.setImageIdIndex(metadata.ci)
     //console.log('update',metadata.start_slice,metadata.end_slice)
     //console.log(metadata)
-    //console.log('v',stack.length,stack.slice(metadata.start_slice,metadata.end_slice),metadata.ci-metadata.start_slice+1)
-    await viewport.setStack(stack,metadata.ci-metadata.start_slice+1)
+    console.log('v',stack.length,stack.slice(0,metadata.end_slice),metadata.ci,metadata.start_slice,metadata.end_slice)
+    viewport.setStack(stack.slice(0,metadata.end_slice),metadata.ci-metadata.start_slice+1)
     viewport.setZoom(metadata.z)
     viewport.setProperties({
       voiRange: cornerstone.utilities.windowLevel.toLowHighRange(metadata.ww, metadata.wc),

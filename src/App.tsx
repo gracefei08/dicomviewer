@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import HeaderComp from './Components/HeaderComp';
 import Divider from '@mui/material/Divider';
 import { useContext } from 'react';
-import { DataContext } from './Context/DataContext';
+import { RenderEngineContext,MetaDataListContext } from './Context/DataContext';
 import { useChromeStorageLocal } from 'use-chrome-storage';
 import { generateMetaData, generateURL } from './utils';
 import CopyToClipboardButtonComp from './Components/CopyToClipboardButtonComp';
@@ -20,31 +20,23 @@ import { MetaData } from './utils';
 import RightDrawerComp from './Components/RightDrawerComp';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import Viewport from './Components/Viewport';
-//@ts-ignore
-import CornerstoneViewport from 'react-cornerstone-viewport'
-//@ts-ignore
-import cornerstoneDICOMImageLoader from '@cornerstonejs/dicom-image-loader';
-//@ts-ignore
-import * as cornerstone from '@cornerstonejs/core';
-//@ts-ignore
-import * as cornerstoneTools from '@cornerstonejs/tools';
-import dicomParser from 'dicom-parser';
-import { convertStackToVolumeSegmentation } from '@cornerstonejs/tools/dist/types/stateManagement/segmentation';
+
 
 
 
 function App() {
   const [value, setValue, isPersistent, error, isInitialStateResolved] = useChromeStorageLocal("PAC_DATA", []);
-  const renderingEngine  = useContext(DataContext);
+ 
+  const {metaDataList,setMetaDataList}  = useContext(MetaDataListContext);
   //let a = value.reduce((pS, cS) => [...pS, cS.instances.reduce((pV, cV) => [...pV, cV.url], [])], [])
-  const [metaDataList, setMetaDataList] = useState<MetaData[]>([]);
+  //const [metaDataList, setMetaDataList] = useState<MetaData[]>([]);
   const [metaDataSelected, setMetaDataSelected] = useState(0)
   const [drawerState, setDrawerState] = useState(false);
   const [rightdrawerState, setRightDrawerState] = useState(false);
-  useEffect(() => {
-    setMetaDataList(generateMetaData(value))
-}, [value])
+  //console.log(metaDataList)
+  //useEffect(() => {
+   // setMetaDataList(generateMetaData(value))
+//}, [value])
 
 
 const handleClick = (metadata:MetaData) => {
@@ -80,7 +72,7 @@ useEffect(() => {
       <Divider />
       
       <Button variant="contained" disableElevation onClick={handleClick2}>Organize Layout</Button>
-      {metaDataList && metaDataList.map(metadata =>
+      {metaDataList.map(metadata =>
         <Card sx={{ maxWidth: 350 }}>
           <CardActionArea onClick={()=>handleClick(metadata)}>
   
@@ -99,7 +91,7 @@ useEffect(() => {
             open={drawerState}
             onClose={()=>setDrawerState(false)}
           >
-            <DrawerComp setDrawerState ={setDrawerState} metadataId={metaDataSelected} metaDataList={metaDataList} setMetaDataList={setMetaDataList}/>
+            <DrawerComp setDrawerState ={setDrawerState} metadataId={metaDataSelected} />
            
           </Drawer>
 
