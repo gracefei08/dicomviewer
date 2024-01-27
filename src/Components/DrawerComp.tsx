@@ -104,7 +104,7 @@ const DrawerComp: React.VFC<DrawerCompProps>  = ({metadataId,metaDataList,setMet
       <Divider />
 
         <Typography>Slice Range</Typography>
-        <div style={{display: 'flex',alignItems: 'center',justifyContent: 'center',}}><SliderComp metadata={metadata} metaDataList={metaDataList} setMetaDataList={setMetaDataList} stateFlag={stateFlag} setStateFlag={setStateFlag}/></div>
+        <div style={{display: 'flex', marginLeft: "20px"}}><SliderComp metadata={metadata} metaDataList={metaDataList} setMetaDataList={setMetaDataList} stateFlag={stateFlag} setStateFlag={setStateFlag}/></div>
         <Typography>WW</Typography>
         <TextField hiddenLabel value={metadata.ww} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("ww", e)}/>
         <Typography>WC</Typography>

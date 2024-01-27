@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect, useState } from 'react';
+import React, { useRef, useContext, useEffect, useState,useMemo } from 'react';
 
 import { DataContext } from '../Context/DataContext';
 import * as cornerstone from '@cornerstonejs/core';
@@ -14,9 +14,27 @@ interface ViewportProps {
   stateFlag:boolean,
   setStateFlag:React.Dispatch<React.SetStateAction<boolean>>,
 }
-
+const initalValues = {
+  thumbnail:"",
+  label:"",
+  id:0,
+  modality:"",
+  prefix:"", 
+  suffix: "",
+  start_slice:1,
+  end_slice : 0,
+  ww:0,
+  wc:0,
+  ci:1,
+  z:0,
+  px:"0",
+  py:"0",
+  r:0,
+  pad:0,
+  cord:[-1,-1]
+}
 const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataList,stateFlag,setStateFlag}) => {
-
+  
 
   const stack=(recreateUriStringList(metadata.prefix,metadata.suffix,metadata.start_slice,metadata.end_slice,metadata.pad))
   //const viewportId = String(metadata.id);
@@ -31,7 +49,7 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
     //@ts-ignoreS
     const window = cornerstone.utilities.windowLevel.toWindowLevel(vp.voiRange.lower, vp.voiRange.upper);
     const [x,y] =vp.getPan()
-    console.log('uupdate stas',vp.getCurrentImageIdIndex(),metadata.start_slice)
+    console.log('uupdate stas',vp.getCurrentImageIdIndex(),metadata)
     setMetaDataList([...metaDataList].map(object => {
       if(object.id === metadata.id) {
         return {
@@ -61,6 +79,7 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
 
       },
     };    
+    console.log('first', metadata)
 
     const loadImagesAndDisplay = async () => {
       if (renderingEngine) {
