@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState,useEffect,  } from 'react'
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import { MetaData } from '../utils';
@@ -14,10 +14,15 @@ interface SliderProps {
 }
 
 const SliderComp: React.VFC<SliderProps> = ({metadata,metaDataList,setMetaDataList,setStateFlag}) => {
-  const [max, setMax] =  React.useState<number>(metadata.end_slice);
+  const [max, setMax] =  useState<number>(metadata.end_slice);
 
-  const [value, setValue] = React.useState<number[]>([metadata.start_slice, metadata.end_slice]);
+  const [value, setValue] = useState<number[]>([metadata.start_slice, metadata.end_slice]);
 
+  //useEffect(()=>{
+
+   // setValue([metadata.start_slice, metadata.end_slice])
+
+  //},[metaDataList])
 
   const handleChange1 = (
     event: Event,
@@ -28,6 +33,7 @@ const SliderComp: React.VFC<SliderProps> = ({metadata,metaDataList,setMetaDataLi
       return;
     }
     setStateFlag(true)
+    
     let [temp1,temp2] = value
     if (activeThumb === 0) {
       setValue([Math.min(newValue[0], temp2 - minDistance), temp2]);
