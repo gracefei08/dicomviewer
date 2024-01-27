@@ -15,7 +15,9 @@ interface SliderProps {
 
 const SliderComp: React.VFC<SliderProps> = ({metadata,metaDataList,setMetaDataList,setStateFlag}) => {
   const [max, setMax] =  React.useState<number>(metadata.end_slice);
+
   const [value, setValue] = React.useState<number[]>([metadata.start_slice, metadata.end_slice]);
+
 
   const handleChange1 = (
     event: Event,
@@ -25,16 +27,18 @@ const SliderComp: React.VFC<SliderProps> = ({metadata,metaDataList,setMetaDataLi
     if (!Array.isArray(newValue)) {
       return;
     }
-    let temp1 = value[0]
-    let temp2 = value[1]
+    setStateFlag(true)
+    let [temp1,temp2] = value
     if (activeThumb === 0) {
       setValue([Math.min(newValue[0], temp2 - minDistance), temp2]);
+      console.log('starting',Math.min(newValue[0], temp2 - minDistance))
       setMetaDataList([...metaDataList].map(object => {
         if(object.id === metadata.id) {
           return {
             ...object,
             start_slice: Math.min(newValue[0], temp2 - minDistance),
-            end_slice:temp2
+            end_slice:temp2,
+            ci: Math.max(metadata.ci, Math.min(newValue[0], temp2 - minDistance))
           }
         }
         
@@ -43,26 +47,26 @@ const SliderComp: React.VFC<SliderProps> = ({metadata,metaDataList,setMetaDataLi
 
     } else {
       setValue([temp1, Math.max(newValue[1], temp1 + minDistance)]);
-      console.log('end',metadata.id,metadata.end_slice,metadata.start_slice)
       setMetaDataList([...metaDataList].map(object => {
         if(object.id === metadata.id) {
           return {
             ...object,
             start_slice: temp1,
-            end_slice: Math.max(newValue[1], temp1 + minDistance)
+            end_slice: Math.max(newValue[1], temp1 + minDistance),
+            ci: Math.min(metadata.ci, Math.max(newValue[1], temp1 + minDistance))
           }
         }
         else return object;
       }))
     }
-    setStateFlag(true)
+
   };
 
   return (
     <>
     <Box sx={{ width: 300 }} >
       <Slider
-        value={value}
+        value={[metadata.start_slice,metadata.end_slice]}
         onChange={handleChange1}
         valueLabelDisplay="auto"
         disableSwap

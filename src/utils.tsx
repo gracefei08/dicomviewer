@@ -63,7 +63,7 @@ export function generateMetaData(list:Array<rawMetaData>) {
         end_slice : x.images.length,
         ww:1400,
         wc:1200,
-        ci:0,
+        ci:1,
         z:1,
         px:"0",
         py:"0",

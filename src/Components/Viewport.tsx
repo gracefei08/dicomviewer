@@ -18,7 +18,7 @@ interface ViewportProps {
 const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataList,stateFlag,setStateFlag}) => {
 
 
-  const [stack,setStack] = useState<string[]>(recreateUriStringList(metadata.prefix,metadata.suffix,metadata.start_slice,metadata.end_slice,metadata.pad))
+  const stack=(recreateUriStringList(metadata.prefix,metadata.suffix,metadata.start_slice,metadata.end_slice,metadata.pad))
   //const viewportId = String(metadata.id);
   const viewportId = `${String(metadata.id)}-vp`;
   const elementRef = useRef<HTMLDivElement>(null)
@@ -28,16 +28,18 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
   const updateStates =  (_event:Event)=>{
     if (renderingEngine){
     const vp = (renderingEngine.getViewport(viewportId) as cornerstone.StackViewport);
-    //@ts-ignore
+    //@ts-ignoreS
     const window = cornerstone.utilities.windowLevel.toWindowLevel(vp.voiRange.lower, vp.voiRange.upper);
     const [x,y] =vp.getPan()
+    console.log('uupdate stas',vp.getCurrentImageIdIndex(),metadata.start_slice)
     setMetaDataList([...metaDataList].map(object => {
       if(object.id === metadata.id) {
         return {
           ...object,
           "wc":window.windowCenter,
           "ww":window.windowWidth,
-          "ci":Math.min(metadata.start_slice,vp.getCurrentImageIdIndex()),
+   
+          "ci":vp.getCurrentImageIdIndex()+metadata.start_slice,
           "z":vp.getZoom(),
           "px":String(x),
           "py":String(y)
@@ -71,8 +73,9 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
           cornerstone.imageLoader.loadAndCacheImage(imageId);
         });
 
-
-        await viewport.setStack(stack.slice(metadata.start_slice,metadata.end_slice),metadata.ci)
+        console.log(metadata.ci,metadata.start_slice)
+        //await viewport.setStack(stack.slice(metadata.start_slice,metadata.end_slice),metadata.ci-metadata.start_slice+1)]
+        await viewport.setStack(stack,metadata.ci-metadata.start_slice+1)
         viewport.setZoom(metadata.z)
         viewport.setPan([Number(metadata.px),Number(metadata.py)])
         //await viewport.setImageIdIndex(metadata.ci)
@@ -144,7 +147,10 @@ const Viewport: React.VFC<ViewportProps>  = ({metadata,metaDataList,setMetaDataL
     if (renderingEngine && stateFlag){
     const viewport = (renderingEngine.getViewport(viewportId) as cornerstone.StackViewport);
     //await viewport.setImageIdIndex(metadata.ci)
-    await viewport.setStack(stack.slice(metadata.start_slice,metadata.end_slice))
+    //console.log('update',metadata.start_slice,metadata.end_slice)
+    //console.log(metadata)
+    //console.log('v',stack.length,stack.slice(metadata.start_slice,metadata.end_slice),metadata.ci-metadata.start_slice+1)
+    await viewport.setStack(stack,metadata.ci-metadata.start_slice+1)
     viewport.setZoom(metadata.z)
     viewport.setProperties({
       voiRange: cornerstone.utilities.windowLevel.toLowHighRange(metadata.ww, metadata.wc),
