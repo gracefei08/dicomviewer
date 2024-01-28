@@ -1,4 +1,4 @@
-import { useState,useEffect,useMemo,useContext  } from 'react'
+import { useState,useEffect,useMemo,useContext,useRef  } from 'react'
 import { MetaDataListContext } from '../Context/DataContext';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
@@ -7,28 +7,23 @@ import { MetaData,initalValues} from '../utils';
 const minDistance = 10;
 
 interface SliderProps {
-  metadataId: number,
+  metadata:MetaData,
 
   stateFlag:boolean,
   setStateFlag:React.Dispatch<React.SetStateAction<boolean>>,
 }
 
-const SliderComp: React.VFC<SliderProps> = ({metadataId,setStateFlag}) => {
+const SliderComp: React.VFC<SliderProps> = ({metadata,setStateFlag}) => {
   
   const {metaDataList,setMetaDataList}  = useContext(MetaDataListContext);
-  //const [value, setValue] = useState<number[]>([metadata.start_slice, metadata.end_slice]);
 
-  //useEffect(()=>{
-  //  console.log('meta',metadata)
-   //setValue([metadata.start_slice, metadata.end_slice])
-
-  //},[metaDataList])
-  const [max, setMax] =  useState<number>(0);
-  const [metadata, setMetadata] =  useState<MetaData>(initalValues);
-  useMemo(() => {
+  const [max, setMax] =  useState<number>(metadata.max_slice);
+  //const [metadata, setMetadata] =  useState<MetaData>(initalValues);
+  useEffect(() => {
     // @ts-ignore
-    setMetadata(metaDataList.find(x => x.id ===metadataId))
-    setMax(metadata.max_slice)
+    //setMetadata(metaDataList.find(x => x.id ===metadataId))
+    //setMax(metadata.max_slice)
+    console.log(metadata.max_slice)
 },[metaDataList])
 
   const handleChange1 = (
@@ -43,10 +38,9 @@ const SliderComp: React.VFC<SliderProps> = ({metadataId,setStateFlag}) => {
     
     let [temp1,temp2] =  [metadata.start_slice,metadata.end_slice]
     if (activeThumb === 0) {
-      //setValue([Math.min(newValue[0], temp2 - minDistance), temp2]);
-      //console.log('starting',Math.min(newValue[0], temp2 - minDistance))
+ 
       setMetaDataList([...metaDataList].map(object => {
-        if(object.id === metadataId) {
+        if(object.id === metadata.id) {
           return {
             ...object,
             start_slice: Math.min(newValue[0], metadata.end_slice - minDistance),
@@ -61,7 +55,7 @@ const SliderComp: React.VFC<SliderProps> = ({metadataId,setStateFlag}) => {
     } else {
       //setValue([temp1, Math.max(newValue[1], temp1 + minDistance)]);
       setMetaDataList([...metaDataList].map(object => {
-        if(object.id === metadataId) {
+        if(object.id === metadata.id) {
           return {
             ...object,
             start_slice: metadata.start_slice,

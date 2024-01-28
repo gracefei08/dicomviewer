@@ -77,18 +77,20 @@ const DrawerComp: React.VFC<DrawerCompProps>  = ({metadataId,setDrawerState}) =>
       <div style={{height: "400px", width:"375px"}}>
       <Viewport metadataId={metadata.id} stateFlag={stateFlag} setStateFlag={setStateFlag}/>
       
+      
       </div>
 
       <Divider />
 
         <Typography>Slice Range</Typography>
-        <div style={{display: 'flex', marginLeft: "20px"}}><SliderComp metadataId={metadata.id} stateFlag={stateFlag} setStateFlag={setStateFlag}/></div>
+        <div style={{display: 'flex', marginLeft: "20px"}}><SliderComp metadata={metadata} stateFlag={stateFlag} setStateFlag={setStateFlag}/></div>
         <Typography>WW</Typography>
         <TextField hiddenLabel value={metadata.ww} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("ww", e)}/>
         <Typography>WC</Typography>
         <TextField hiddenLabel value={metadata.wc} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("wc", e)}/>
+        {/**fix Ci input */}
         <Typography>Ci</Typography>
-        <TextField hiddenLabel value={metadata.ci} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("ci", e)}/>
+        <TextField hiddenLabel value={metadata.ci+metadata.start_slice} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("ci", e)}/>
         <Typography>z</Typography>
         <TextField hiddenLabel value={metadata.z} size="small" onChange={(e: React.ChangeEvent<HTMLInputElement>) => saveStates("z", e)}/>
         <Typography>px</Typography>

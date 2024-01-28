@@ -29,14 +29,10 @@ function App() {
  
   const {metaDataList,setMetaDataList}  = useContext(MetaDataListContext);
   //let a = value.reduce((pS, cS) => [...pS, cS.instances.reduce((pV, cV) => [...pV, cV.url], [])], [])
-  //const [metaDataList, setMetaDataList] = useState<MetaData[]>([]);
   const [metaDataSelected, setMetaDataSelected] = useState(0)
   const [drawerState, setDrawerState] = useState(false);
   const [rightdrawerState, setRightDrawerState] = useState(false);
-  //console.log(metaDataList)
-  //useEffect(() => {
-   // setMetaDataList(generateMetaData(value))
-//}, [value])
+
 
 
 const handleClick = (metadata:MetaData) => {
@@ -47,22 +43,7 @@ const handleClick2 = () => {
   setRightDrawerState(true)
 
 }
-/** 
-useEffect(() => {
-  console.log("layout rerendering")
-  const handleResize = () => {
-    
-    if (renderingEngine) renderingEngine.resize(true);
-  };
-  console.log(renderingEngine)
-  if (renderingEngine) window.addEventListener('resize', handleResize);
-  return () => {
-      window.removeEventListener('resize', handleResize);
-  };
-  
 
-}, [renderingEngine]);
-*/
   return (
 
     <DndProvider backend={HTML5Backend}>

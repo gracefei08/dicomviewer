@@ -20,14 +20,18 @@ const Viewport: React.VFC<ViewportProps>  = ({metadataId,stateFlag,setStateFlag}
   const [metadata, setMetadata] =  useState<MetaData>(initalValues);
   useMemo(() => {
 
-    // @ts-ignore
+     //@ts-ignore
     setMetadata(metaDataList.find(x => x.id ===metadataId))
+    refValue.current = metaDataList;
+    console.log(refValue.current)
    
 },[metaDataList])
 
-useEffect(() => {
-  refValue.current = metaDataList;
-});
+//useEffect(() => {
+ // refValue.current = metaDataList;
+   // @ts-ignore
+   //setMetadata(metaDataList.find(x => x.id ===metadataId))
+//},[metaDataList]);
   const stack=recreateUriStringList(metadata.prefix,metadata.suffix,metadata.start_slice,metadata.end_slice,metadata.pad)
   //const viewportId = String(metadata.id);
   const viewportId = `${String(metadata.id)}-vp`;
