@@ -46,7 +46,7 @@ const Viewport: React.VFC<ViewportProps>  = ({metadataId,stateFlag,setStateFlag}
     const window = cornerstone.utilities.windowLevel.toWindowLevel(vp.voiRange.lower, vp.voiRange.upper);
     const [x,y] =vp.getPan()
     
-    //console.log('uupdate stas',vp.getCurrentImageIdIndex(),metadata)
+  
     setMetaDataList([...refValue.current].map(object => {
       if(object.id === metadata.id) {
         return {
