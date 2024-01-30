@@ -53,6 +53,22 @@ const handleClick2 = () => {
       <Divider />
       
       <Button variant="contained" disableElevation onClick={handleClick2}>Organize Layout</Button>
+      <Drawer
+            anchor='right'
+            open={rightdrawerState}
+            onClose={()=>setRightDrawerState(false)}
+          >
+            <RightDrawerComp setDrawerState ={setRightDrawerState}  metaDataList={metaDataList} setMetaDataList={setMetaDataList}/>
+           
+          </Drawer>
+          <Drawer
+            anchor='left'
+            open={drawerState}
+            onClose={()=>setDrawerState(false)}
+          >
+            <DrawerComp setDrawerState ={setDrawerState} metadataId={metaDataSelected} />
+           
+          </Drawer>
       {metaDataList.map(metadata =>
         <Card sx={{ maxWidth: 350 }}>
           <CardActionArea onClick={()=>handleClick(metadata)}>
@@ -67,23 +83,9 @@ const handleClick2 = () => {
 
 
           </CardActionArea>
-          <Drawer
-            anchor='left'
-            open={drawerState}
-            onClose={()=>setDrawerState(false)}
-          >
-            <DrawerComp setDrawerState ={setDrawerState} metadataId={metaDataSelected} />
-           
-          </Drawer>
+         
 
-          <Drawer
-            anchor='right'
-            open={rightdrawerState}
-            onClose={()=>setRightDrawerState(false)}
-          >
-            <RightDrawerComp setDrawerState ={setRightDrawerState} metadataId={metaDataSelected} metaDataList={metaDataList} setMetaDataList={setMetaDataList}/>
-           
-          </Drawer>
+         
 
 
         </Card>
