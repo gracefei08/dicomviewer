@@ -18,13 +18,6 @@ const SliderComp: React.VFC<SliderProps> = ({metadata,setStateFlag}) => {
   const {metaDataList,setMetaDataList}  = useContext(MetaDataListContext);
 
   const [max, setMax] =  useState<number>(metadata.max_slice);
-  //const [metadata, setMetadata] =  useState<MetaData>(initalValues);
-  useEffect(() => {
-    // @ts-ignore
-    //setMetadata(metaDataList.find(x => x.id ===metadataId))
-    //setMax(metadata.max_slice)
-    console.log(metadata.max_slice)
-},[metaDataList])
 
   const handleChange1 = (
     event: Event,
@@ -36,7 +29,7 @@ const SliderComp: React.VFC<SliderProps> = ({metadata,setStateFlag}) => {
     }
     setStateFlag(true)
     
-    let [temp1,temp2] =  [metadata.start_slice,metadata.end_slice]
+    //let [temp1,temp2] =  [metadata.start_slice,metadata.end_slice]
     if (activeThumb === 0) {
  
       setMetaDataList([...metaDataList].map(object => {

@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect, useState,useMemo } from 'react';
+import React, { useRef, useContext, useEffect, useState,useMemo,useCallback } from 'react';
 
 import { RenderEngineContext } from '../Context/DataContext';
 import * as cornerstone from '@cornerstonejs/core';
@@ -19,19 +19,15 @@ const Viewport: React.VFC<ViewportProps>  = ({metadataId,stateFlag,setStateFlag}
   const refValue = useRef(metaDataList);
   const [metadata, setMetadata] =  useState<MetaData>(initalValues);
   useMemo(() => {
-
+  
      //@ts-ignore
     setMetadata(metaDataList.find(x => x.id ===metadataId))
     refValue.current = metaDataList;
-    console.log(refValue.current)
+    console.log("view",refValue.current)
    
 },[metaDataList])
 
-//useEffect(() => {
- // refValue.current = metaDataList;
-   // @ts-ignore
-   //setMetadata(metaDataList.find(x => x.id ===metadataId))
-//},[metaDataList]);
+
   const stack=recreateUriStringList(metadata.prefix,metadata.suffix,metadata.start_slice,metadata.end_slice,metadata.pad)
   //const viewportId = String(metadata.id);
   const viewportId = `${String(metadata.id)}-vp`;
@@ -39,6 +35,8 @@ const Viewport: React.VFC<ViewportProps>  = ({metadataId,stateFlag,setStateFlag}
   //const { viewport_idx, rendering_engine } = props;
   const renderingEngine = useContext(RenderEngineContext);
 
+
+  
   const updateStates =  (_event:Event)=>{
     if (renderingEngine){
     const vp = (renderingEngine.getViewport(viewportId) as cornerstone.StackViewport);
@@ -162,7 +160,6 @@ const Viewport: React.VFC<ViewportProps>  = ({metadataId,stateFlag,setStateFlag}
     //await viewport.setImageIdIndex(metadata.ci)
     //console.log('update',metadata.start_slice,metadata.end_slice)
     //console.log(metadata)
-    console.log('v',stack.length,stack.slice(0,metadata.end_slice),metadata.ci,metadata.start_slice,metadata.end_slice)
     viewport.setStack(stack.slice(0,metadata.end_slice),metadata.ci-metadata.start_slice+1)
     viewport.setZoom(metadata.z)
     viewport.setProperties({
@@ -177,7 +174,6 @@ const Viewport: React.VFC<ViewportProps>  = ({metadataId,stateFlag,setStateFlag}
     setStateFlag(false)
     }
   }
-  update()
 
   },[metaDataList])
  
