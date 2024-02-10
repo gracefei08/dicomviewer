@@ -61,7 +61,7 @@ const DrawerComp: React.VFC<DrawerCompProps>  = ({metadataId,setDrawerState}) =>
 
     return (
         <Box
-        sx={{ width:400 }}
+        sx={{ width:"375px"}}
         role="presentation"
       >
 

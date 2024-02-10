@@ -1,63 +1,65 @@
-
-
-import { MetaData} from '../utils';
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import { CardHeader } from '@mui/material';
-import { useDrag } from 'react-dnd';
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
-
+import { MetaData } from "../utils";
+import * as React from "react";
+import Card from "@mui/material/Card";
+import { useDrag } from "react-dnd";
+import CloseIcon from "@mui/icons-material/Close";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 interface DragCompProps {
-    metadata: MetaData,
-    metaDataList: MetaData[],
-    setMetaDataList: React.Dispatch<React.SetStateAction<MetaData[]>>
+  metadata: MetaData;
+  metaDataList: MetaData[];
+  setMetaDataList: React.Dispatch<React.SetStateAction<MetaData[]>>;
 }
 
-const DragComp: React.VFC<DragCompProps> = ({ metadata,metaDataList,setMetaDataList }) => {
-    
-    const [{isDragging},drag] = useDrag(()=>({
+const DragComp: React.VFC<DragCompProps> = ({
+  metadata,
+  metaDataList,
+  setMetaDataList,
+}) => {
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: "card",
+    item: { id: metadata.id },
+    collect: (monitor: any) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }));
 
-        type:"card",
-        item:{id:metadata.id},
-        collect:((monitor:any)=>({
-            isDragging:!!monitor.isDragging()
-        }))
-    }))
+  const resetPosition = () => {
+    setMetaDataList(
+      [...metaDataList].map((object) => {
+        if (object.id === metadata.id) {
+          return {
+            ...object,
+            cord: [-1, -1],
+          };
+        } else return object;
+      })
+    );
+  };
 
-    const resetPosition = ()=>{
-        setMetaDataList([...metaDataList].map(object => {
-            if(object.id === metadata.id) {
-              return {
-                ...object,
-                cord:[-1,-1]
-              }
-            }
-            
-            else return object;
-          }))
-        }
-
-    return (
-        <Card sx={{ width: 80, height:60 }} ref={drag}>
-            <CardHeader
+  return (
   
-        action={
-            <IconButton  size="small" onClick = {()=>resetPosition()} >
-            <CloseIcon style={{ fontSize: 10 }}/>
-            
-          </IconButton>
-        }
-        title={metadata.label}
-        titleTypographyProps={{variant:'body2' }}
 
-      />
+    <Box
+      sx={{
+        width: 76,
+        height: 60,
+        border: "1px solid black",
+        margin:"auto"
+      }}
+      ref={drag}     
+    >
+      <Typography style={{ fontSize: 13 }}>
+        <IconButton size="small" onClick={() => resetPosition()}>
+          <CloseIcon style={{ fontSize: 13 }} />
+        </IconButton>
+        {metadata.label}
+      </Typography>
+    </Box>
 
-        </Card>
+  );
+};
 
-    )
-}
-
-export default DragComp
-
+export default DragComp;

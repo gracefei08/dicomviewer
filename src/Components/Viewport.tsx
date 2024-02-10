@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect, useState, useMemo, useCallback } from 'react';
+import React, { useRef, useContext, useEffect, useState, useMemo } from 'react';
 
 import { RenderEngineContext } from '../Context/DataContext';
 import * as cornerstone from '@cornerstonejs/core';
@@ -23,8 +23,8 @@ const Viewport: React.VFC<ViewportProps> = ({ metadataId, stateFlag, setStateFla
   const renderingEngine = useContext(RenderEngineContext);
 
   useMemo(() => {
-    //@ts-ignore
-    setMetadata(metaDataList.find(x => x.id === metadataId))
+
+    setMetadata(metaDataList.find(x => x.id === metadataId) || initalValues)
     refValue.current = metaDataList;
   }, [metaDataList])
 
@@ -74,7 +74,6 @@ const Viewport: React.VFC<ViewportProps> = ({ metadataId, stateFlag, setStateFla
           cornerstone.imageLoader.loadAndCacheImage(imageId);
         });
 
-
         await viewport.setStack(stack.slice(0, metadata.end_slice), metadata.ci - metadata.start_slice)
         viewport.setZoom(metadata.z)
         viewport.setPan([Number(metadata.px), Number(metadata.py)])
@@ -82,7 +81,6 @@ const Viewport: React.VFC<ViewportProps> = ({ metadataId, stateFlag, setStateFla
         viewport.setProperties({
           voiRange: cornerstone.utilities.windowLevel.toLowHighRange(metadata.ww, metadata.wc),
           isComputedVOI: false,
-
         });
 
         viewport.render();
@@ -131,19 +129,20 @@ const Viewport: React.VFC<ViewportProps> = ({ metadataId, stateFlag, setStateFla
 
   useEffect(() => {
     const update = async () => {
-      //@ts-ignoreS
-      const viewport = (renderingEngine.getViewport(viewportId) as cornerstone.StackViewport);
-      if (viewport && stateFlag) {
-        await viewport.setStack(stack.slice(0, metadata.end_slice), metadata.ci - metadata.start_slice)
-        viewport.setZoom(metadata.z)
-        viewport.setProperties({
-          voiRange: cornerstone.utilities.windowLevel.toLowHighRange(metadata.ww, metadata.wc),
-          isComputedVOI: false,
-        });
+      if (renderingEngine) {
+        const viewport = (renderingEngine.getViewport(viewportId) as cornerstone.StackViewport);
+        if (viewport && stateFlag) {
+          await viewport.setStack(stack.slice(0, metadata.end_slice), metadata.ci - metadata.start_slice)
+          viewport.setZoom(metadata.z)
+          viewport.setProperties({
+            voiRange: cornerstone.utilities.windowLevel.toLowHighRange(metadata.ww, metadata.wc),
+            isComputedVOI: false,
+          });
 
-        viewport.setPan([metadata.px === "-" ? 0 : Number(metadata.px), metadata.py === "-" ? 0 : Number(metadata.py)])
-        viewport.render()
-        setStateFlag(false)
+          viewport.setPan([metadata.px === "-" ? 0 : Number(metadata.px), metadata.py === "-" ? 0 : Number(metadata.py)])
+          viewport.render()
+          setStateFlag(false)
+        }
       }
     }
     update()

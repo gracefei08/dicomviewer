@@ -5,7 +5,6 @@ import HeaderComp from './Components/HeaderComp';
 import Divider from '@mui/material/Divider';
 import { useContext } from 'react';
 import { MetaDataListContext } from './Context/DataContext';
-import { useChromeStorageLocal } from 'use-chrome-storage';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -13,7 +12,7 @@ import { CardActionArea } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
 import DrawerComp from './Components/DrawerComp';
 import { MetaData } from './utils';
-import RightDrawerComp from './Components/RightDrawerComp';
+import DndDrawerComp from './Components/DndDrawerComp';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -24,7 +23,7 @@ function App() {
   const { metaDataList, setMetaDataList } = useContext(MetaDataListContext);
   const [metaDataSelected, setMetaDataSelected] = useState(0)
   const [drawerState, setDrawerState] = useState(false);
-  const [rightdrawerState, setRightDrawerState] = useState(false);
+  const [dndDrawerState, setDndDrawerState] = useState(false);
 
 
   const handleClick = (metadata: MetaData) => {
@@ -32,7 +31,7 @@ function App() {
     setMetaDataSelected(metadata.id)
   }
   const handleClick2 = () => {
-    setRightDrawerState(true)
+    setDndDrawerState(true)
   }
 
   return (
@@ -45,11 +44,11 @@ function App() {
 
         <Button variant="contained" disableElevation onClick={handleClick2}>Organize Layout</Button>
         <Drawer
-          anchor='right'
-          open={rightdrawerState}
-          onClose={() => setRightDrawerState(false)}
+          anchor='left'
+          open={dndDrawerState}
+          onClose={() => setDndDrawerState(false)}
         >
-          <RightDrawerComp setDrawerState={setRightDrawerState} metaDataList={metaDataList} setMetaDataList={setMetaDataList} />
+          <DndDrawerComp setDrawerState={setDndDrawerState} metaDataList={metaDataList} setMetaDataList={setMetaDataList} />
 
         </Drawer>
         <Drawer

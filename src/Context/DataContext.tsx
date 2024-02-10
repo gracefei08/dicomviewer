@@ -7,7 +7,7 @@ import { useChromeStorageLocal } from 'use-chrome-storage';
 //@ts-ignore
 import cornerstoneDICOMImageLoader from '@cornerstonejs/dicom-image-loader';
 import dicomParser from 'dicom-parser';
-import { generateMetaData, generateURL,MetaData } from '../utils';
+import { generateMetaData,MetaData } from '../utils';
 
 //export const DataContext = createContext();    
 interface MetaDataListContextProp {
