@@ -1,8 +1,8 @@
-import { useState,useEffect,useMemo,useContext,useRef  } from 'react'
+import { useState,useContext  } from 'react'
 import { MetaDataListContext } from '../Context/DataContext';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
-import { MetaData,initalValues} from '../utils';
+import { MetaData} from '../utils';
 
 const minDistance = 10;
 
@@ -16,8 +16,8 @@ interface SliderProps {
 const SliderComp: React.VFC<SliderProps> = ({metadata,setStateFlag}) => {
   
   const {metaDataList,setMetaDataList}  = useContext(MetaDataListContext);
-
   const [max, setMax] =  useState<number>(metadata.max_slice);
+  
 
   const handleChange1 = (
     event: Event,
@@ -28,8 +28,6 @@ const SliderComp: React.VFC<SliderProps> = ({metadata,setStateFlag}) => {
       return;
     }
     setStateFlag(true)
-    
-    //let [temp1,temp2] =  [metadata.start_slice,metadata.end_slice]
     if (activeThumb === 0) {
  
       setMetaDataList([...metaDataList].map(object => {
@@ -41,12 +39,10 @@ const SliderComp: React.VFC<SliderProps> = ({metadata,setStateFlag}) => {
             ci: Math.max(metadata.ci, Math.min(newValue[0], metadata.end_slice - minDistance))
           }
         }
-        
         else return object;
       }))
 
     } else {
-      //setValue([temp1, Math.max(newValue[1], temp1 + minDistance)]);
       setMetaDataList([...metaDataList].map(object => {
         if(object.id === metadata.id) {
           return {
@@ -59,7 +55,6 @@ const SliderComp: React.VFC<SliderProps> = ({metadata,setStateFlag}) => {
         else return object;
       }))
     }
-
   };
 
   return (

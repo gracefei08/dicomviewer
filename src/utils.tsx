@@ -145,8 +145,6 @@ export function generateGridURL(metaDataList:MetaData[],row:number,col:number){
 
 
   })
-
-  console.log(URL_genereated.href)
   return URL_genereated.href
 
 
@@ -174,48 +172,3 @@ export function recreateUriStringList(prefix:string, suffix:string, start_str:nu
   const variableStringList = recreateVariableStringList( String(start_str).padStart(pad, '0'), String(end_str).padStart(pad, '0'));
   return variableStringList.map(str => "dicomweb:"+prefix + str + suffix);
 }
-/**"https://s3.amazonaws.com/elasticbeanstalk-us-east-1-843279806438/dicom/production/-ywXf2R16d_1.3.12.2.1107.5.1.4.73513.30000019073108281347500001430/1.dcm.gz"
-"https://s3.amazonaws.com/elasticbeanstalk-us-east-1-843279806438/dicom/production/-ywXf2R16d_1.3.12.2.1107.5.1.4.73513.30000019073110243989500021595/001.dcm.gz"
-"https://s3.amazonaws.com/elasticbeanstalk-us-east-1-843279806438/dicom/production/-ywXf2R16d_1.3.12.2.1107.5.1.4.73513.30000019073110243989500022713/101.dcm.gz"
-
-
-https://attheviewbox.github.io/TemplateStaticCornerstone3DViewport/?m=true&
-ld.r=1&
-ld.c=1&
-vd.0.s.pf=dicomweb%3Ahttps%3A%2F%2Fs3.amazonaws.com%2Felasticbeanstalk-us-east-1-843279806438%2Fdicom%2Fproduction%2F-ywXf2R16d_1.3.12.2.1107.5.1.4.73513.30000019073110243989500020904%2F&
-vd.0.s.sf=.dcm.gz&
-vd.0.s.s=101&
-vd.0.s.e=130&
-vd.0.ww=1400&
-vd.0.wc=1200&
-vd.0.ci=0&
-vd.1.z=1&
-vd.1.px=0&
-vd.1.py=0&
-vd.1.r=0
-
-https://attheviewbox.github.io/TemplateStaticCornerstone3DViewport/?m=true&
-ld.r=2&ld.c=3&
-vd.0.s.pf=dicomweb%3Ahttps%3A%2F%2Fs3.amazonaws.com%2Felasticbeanstalk-us-east-1-843279806438%2Fdicom%2Fproduction%2F-ywXf2R16d_1.3.12.2.1107.5.1.4.73513.30000019073110243989500020904%2F&
-vd.0.s.sf=.dcm.gz&
-vd.0.s.s=460&
-vd.0.s.e=541&
-vd.0.ww=1400&
-vd.0.wc=1200&
-vd.0.ci=0&
-vd.0.z=1&
-vd.0.px=0&
-vd.0.py=0&v
-d.0.r=0&
-vd.2.s.pf=dicomweb%3Ahttps%3A%2F%2Fs3.amazonaws.com%2Felasticbeanstalk-us-east-1-843279806438%2Fdicom%2Fproduction%2F-ywXf2R16d_1.3.12.2.1107.5.1.4.73513.30000019073110243989500021446%2F&
-vd.2.s.sf=.dcm.gz&
-vd.2.s.s=128&
-vd.2.s.e=148&
-vd.2.ww=1400&
-vd.2.wc=1200&
-vd.2.ci=0&
-vd.2.z=1&
-vd.2.px=0&
-vd.2.py=0&
-vd.2.r=0&
-vd.2.s.pf=dicomweb%3Ahttps%3A%2F%2Fs3.amazonaws.com%2Felasticbeanstalk-us-east-1-843279806438%2Fdicom%2Fproduction%2F-ywXf2R16d_1.3.12.2.1107.5.1.4.73513.30000019073110243989500021595%2F&vd.2.s.sf=.dcm.gz&vd.2.s.s=184&vd.2.s.e=215&vd.2.ww=1400&vd.2.wc=1200&vd.2.ci=0&vd.2.z=1&vd.2.px=0&vd.2.py=0&vd.2.r=0*/

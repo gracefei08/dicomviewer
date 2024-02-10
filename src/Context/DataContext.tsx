@@ -1,5 +1,4 @@
 import { createContext, useState, useEffect,  } from "react";
-import { ContextType } from "react";
 import { PropsWithChildren } from "react";
 import * as cornerstone from '@cornerstonejs/core';
 import * as cornerstoneTools from '@cornerstonejs/tools';
@@ -18,7 +17,6 @@ interface MetaDataListContextProp {
   
 export const RenderEngineContext = createContext<cornerstone.RenderingEngine | undefined>(undefined);
 export const MetaDataListContext = createContext<MetaDataListContextProp>({metaDataList:[],setMetaDataList:()=>{}});
-// create initial data object from URL query string
 
 
 export const DataProvider = ({ children }: PropsWithChildren<{}>) => {
@@ -26,14 +24,9 @@ export const DataProvider = ({ children }: PropsWithChildren<{}>) => {
     const [metaDataList, setMetaDataList] = useState<MetaData[]>([]);
     const [renderingEngine, SetRenderingEngine] = useState<cornerstone.RenderingEngine>()
     const [value, setValue, isPersistent, error, isInitialStateResolved] = useChromeStorageLocal("PAC_DATA", []);
+    
     useEffect(() => {
-
-
         const setupCornerstone = async () => {
-
-            //window.cornerstone = cornerstone;
-
-            //window.cornerstoneTools = cornerstoneTools;
             cornerstoneDICOMImageLoader.external.cornerstone = cornerstone;
             cornerstoneDICOMImageLoader.external.dicomParser = dicomParser;
             await cornerstone.init();
@@ -67,9 +60,7 @@ export const DataProvider = ({ children }: PropsWithChildren<{}>) => {
     useEffect(() => {
         setMetaDataList(generateMetaData(value))
     }, [value])
-
     return (
-
         <RenderEngineContext.Provider value={renderingEngine}>
          <MetaDataListContext.Provider value={{metaDataList,setMetaDataList}}>
                 {children}

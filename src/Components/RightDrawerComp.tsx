@@ -1,10 +1,10 @@
-import { Button} from '@mui/material'
+import { Button } from '@mui/material'
 import { useState } from 'react'
 import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
-import { MetaData} from '../utils';
+import { MetaData } from '../utils';
 import Divider from '@mui/material/Divider';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -16,20 +16,17 @@ import DropComp from './DropComp';
 import { generateGridURL } from '../utils';
 
 
-
 interface RidgeDrawerCompProps {
     metaDataList: MetaData[],
     setMetaDataList: React.Dispatch<React.SetStateAction<MetaData[]>>,
     setDrawerState: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-
-
-const RightDrawerComp: React.VFC<RidgeDrawerCompProps> = ({  metaDataList, setMetaDataList, setDrawerState }) => {
+const RightDrawerComp: React.VFC<RidgeDrawerCompProps> = ({ metaDataList, setMetaDataList, setDrawerState }) => {
     const [url, setURL] = useState<string>("Click Generate URL");
     const [rows, setRows] = useState<number>(1);
     const [cols, setCols] = useState<number>(1);
-   
+
     //console.log(metaDataList)
     const addCol = () => {
         if (cols < 4) {
@@ -37,7 +34,7 @@ const RightDrawerComp: React.VFC<RidgeDrawerCompProps> = ({  metaDataList, setMe
         }
     }
 
-    const minusCol =  () => {
+    const minusCol = () => {
         if (cols > 1) {
             setCols(cols - 1)
         }
@@ -57,7 +54,7 @@ const RightDrawerComp: React.VFC<RidgeDrawerCompProps> = ({  metaDataList, setMe
 
     return (
         <div>
-              
+
             <Box
                 sx={{ width: 350 }}
                 role="presentation"
@@ -95,41 +92,40 @@ const RightDrawerComp: React.VFC<RidgeDrawerCompProps> = ({  metaDataList, setMe
                 <Grid container spacing={1} alignItems="center">
                     {
                         metaDataList.map((data) => {
-                            if(data.cord[0]==-1 &&data.cord[1]==-1){
-                            return (
-                                <Grid item alignItems="center" >
-                                    <DragComp metadata={data} metaDataList={metaDataList} setMetaDataList={setMetaDataList}/>
-                                </Grid>
-                            )}
+                            if (data.cord[0] == -1 && data.cord[1] == -1) {
+                                return (
+                                    <Grid item alignItems="center" >
+                                        <DragComp metadata={data} metaDataList={metaDataList} setMetaDataList={setMetaDataList} />
+                                    </Grid>
+                                )
+                            }
 
                         })
                     }
                 </Grid>
-
-
-                <Divider/>
+                <Divider />
             </Box>
- 
-                <Grid container columns={12} >
-                    {Array.from(Array(cols * rows).keys()).map((value) => (
-                        <DropComp metaDataList={metaDataList} rows={rows} cols={cols} value= {value} setMetaDataList={setMetaDataList}/>
-                    ))}
-                </Grid>
 
-                <Button variant="contained" onClick = {()=>setURL(generateGridURL(metaDataList,rows,cols))}>Generate URL</Button>
-    
-      
-          
-          <TextField
-           size="small"
-  placeholder={url }
-  multiline
-  rows={2}
-  maxRows={4}
-/>
-          
-          <CopyToClipboardButtonComp url={url}/>
-            
+            <Grid container columns={12} >
+                {Array.from(Array(cols * rows).keys()).map((value) => (
+                    <DropComp metaDataList={metaDataList} rows={rows} cols={cols} value={value} setMetaDataList={setMetaDataList} />
+                ))}
+            </Grid>
+
+            <Button variant="contained" onClick={() => setURL(generateGridURL(metaDataList, rows, cols))}>Generate URL</Button>
+
+
+
+            <TextField
+                size="small"
+                placeholder={url}
+                multiline
+                rows={2}
+                maxRows={4}
+            />
+
+            <CopyToClipboardButtonComp url={url} />
+
         </div>
 
     )

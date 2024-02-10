@@ -1,19 +1,15 @@
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import HeaderComp from './Components/HeaderComp';
 import Divider from '@mui/material/Divider';
 import { useContext } from 'react';
-import { RenderEngineContext,MetaDataListContext } from './Context/DataContext';
+import { MetaDataListContext } from './Context/DataContext';
 import { useChromeStorageLocal } from 'use-chrome-storage';
-import { generateMetaData, generateURL } from './utils';
-import CopyToClipboardButtonComp from './Components/CopyToClipboardButtonComp';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
-import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import DrawerComp from './Components/DrawerComp';
 import { MetaData } from './utils';
@@ -25,74 +21,60 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 
 
 function App() {
-  const [value, setValue, isPersistent, error, isInitialStateResolved] = useChromeStorageLocal("PAC_DATA", []);
- 
-  const {metaDataList,setMetaDataList}  = useContext(MetaDataListContext);
-  //let a = value.reduce((pS, cS) => [...pS, cS.instances.reduce((pV, cV) => [...pV, cV.url], [])], [])
+  const { metaDataList, setMetaDataList } = useContext(MetaDataListContext);
   const [metaDataSelected, setMetaDataSelected] = useState(0)
   const [drawerState, setDrawerState] = useState(false);
   const [rightdrawerState, setRightDrawerState] = useState(false);
 
 
-
-const handleClick = (metadata:MetaData) => {
-  setDrawerState(true)
-  setMetaDataSelected(metadata.id)
-}
-const handleClick2 = () => {
-  setRightDrawerState(true)
-
-}
+  const handleClick = (metadata: MetaData) => {
+    setDrawerState(true)
+    setMetaDataSelected(metadata.id)
+  }
+  const handleClick2 = () => {
+    setRightDrawerState(true)
+  }
 
   return (
 
     <DndProvider backend={HTML5Backend}>
 
-    <div >
-      <HeaderComp/>
-      <Divider />
-      
-      <Button variant="contained" disableElevation onClick={handleClick2}>Organize Layout</Button>
-      <Drawer
-            anchor='right'
-            open={rightdrawerState}
-            onClose={()=>setRightDrawerState(false)}
-          >
-            <RightDrawerComp setDrawerState ={setRightDrawerState}  metaDataList={metaDataList} setMetaDataList={setMetaDataList}/>
-           
-          </Drawer>
-          <Drawer
-            anchor='left'
-            open={drawerState}
-            onClose={()=>setDrawerState(false)}
-          >
-            <DrawerComp setDrawerState ={setDrawerState} metadataId={metaDataSelected} />
-           
-          </Drawer>
-      {metaDataList.map(metadata =>
-        <Card sx={{ maxWidth: 350 }}>
-          <CardActionArea onClick={()=>handleClick(metadata)}>
-  
+      <div >
+        <HeaderComp />
+        <Divider />
 
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                {metadata.label}
-              </Typography>
+        <Button variant="contained" disableElevation onClick={handleClick2}>Organize Layout</Button>
+        <Drawer
+          anchor='right'
+          open={rightdrawerState}
+          onClose={() => setRightDrawerState(false)}
+        >
+          <RightDrawerComp setDrawerState={setRightDrawerState} metaDataList={metaDataList} setMetaDataList={setMetaDataList} />
 
-            </CardContent>
+        </Drawer>
+        <Drawer
+          anchor='left'
+          open={drawerState}
+          onClose={() => setDrawerState(false)}
+        >
+          <DrawerComp setDrawerState={setDrawerState} metadataId={metaDataSelected} />
+
+        </Drawer>
+        {metaDataList.map(metadata =>
+          <Card sx={{ maxWidth: 350 }}>
+            <CardActionArea onClick={() => handleClick(metadata)}>
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  {metadata.label}
+                </Typography>
+
+              </CardContent>
 
 
-          </CardActionArea>
-         
-
-         
-
-
-        </Card>
-      )}
-
-    </div>
-    
+            </CardActionArea>
+          </Card>
+        )}
+      </div>
     </DndProvider>
 
   );

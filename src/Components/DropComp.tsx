@@ -1,5 +1,4 @@
 
-
 import { MetaData} from '../utils';
 import * as React from 'react';
 import { useDrop } from 'react-dnd';
@@ -7,7 +6,6 @@ import { Grid } from '@mui/material';
 import { experimentalStyled as styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import DragComp from './DragComp';
-
 
 
 
