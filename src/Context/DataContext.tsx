@@ -23,8 +23,7 @@ export const MetaDataListContext = createContext<MetaDataListContextProp>({
   setMetaDataList: () => {},
 });
 
-export const DataProvider = ({ children }: PropsWithChildren<{}>) => {
-  //const [data, dispatch] = useReducer(dataReducer, urlData);
+export const DataProvider = ({ children }: PropsWithChildren<{}>) => {  
   const [metaDataList, setMetaDataList] = useState<MetaData[]>([]);
   const [renderingEngine, SetRenderingEngine] =
     useState<cornerstone.RenderingEngine>();

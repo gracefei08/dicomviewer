@@ -113,18 +113,19 @@ const DndDrawerComp: React.VFC<DndDrawerCompProps> = ({
         >
           Generate URL
         </Button>
+        <CopyToClipboardButtonComp url={url} />
         <div>
           <TextField
             size="medium"
             placeholder={url}
             multiline
-            rows={6}
+            rows={8}
             maxRows={32}
             fullWidth
             sx={{ marginTop: "5px" }}
           />
         </div>
-        <CopyToClipboardButtonComp url={url} />
+        
       </Box>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo } from "react";
 import { MetaDataListContext } from "../Context/DataContext";
 import TextField from "@mui/material/TextField";
 import SliderComp from "./SliderComp";
@@ -10,8 +10,7 @@ import { MetaData, initalValues } from "../utils";
 import Divider from "@mui/material/Divider";
 import { useContext } from "react";
 import Viewport from "./Viewport";
-
-const minDistance = 10;
+import { Grid } from "@mui/material";
 
 interface DrawerCompProps {
   metadataId: number;
@@ -83,81 +82,101 @@ const DrawerComp: React.VFC<DrawerCompProps> = ({
 
       <Divider />
 
-      <Typography>Slice Range(select slice ranges first)</Typography>
-      <div style={{ display: "flex", marginLeft: "20px" }}>
-        <SliderComp
-          metadata={metadata}
-          stateFlag={stateFlag}
-          setStateFlag={setStateFlag}
-        />
+      <div style={{ marginLeft: "20px" }}>
+        <Typography>Slice Range</Typography>
+        <div>
+          <SliderComp
+            metadata={metadata}
+            stateFlag={stateFlag}
+            setStateFlag={setStateFlag}
+          />
+        </div>
       </div>
 
-      <Typography>WW</Typography>
-      <TextField
-        hiddenLabel
-        value={metadata.ww}
-        size="small"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          saveStates("ww", e)
-        }
-      />
-      <Typography>WC</Typography>
-      <TextField
-        hiddenLabel
-        value={metadata.wc}
-        size="small"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          saveStates("wc", e)
-        }
-      />
-      {/**fix Ci input */}
-      <Typography>Ci</Typography>
-      <TextField
-        hiddenLabel
-        value={metadata.ci}
-        size="small"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          saveStates("ci", e)
-        }
-      />
-      <Typography>z</Typography>
-      <TextField
-        hiddenLabel
-        value={metadata.z}
-        size="small"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          saveStates("z", e)
-        }
-      />
-      <Typography>px</Typography>
-      <TextField
-        hiddenLabel
-        value={metadata.px}
-        size="small"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          saveStates("px", e)
-        }
-      />
-      <Typography>py</Typography>
-      <TextField
-        hiddenLabel
-        value={metadata.py}
-        size="small"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          saveStates("py", e)
-        }
-      />
-      <Typography>r</Typography>
-      <TextField
-        hiddenLabel
-        value={metadata.r}
-        size="small"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          saveStates("r", e)
-        }
-      />
+      <Box sx={{ margin: "15px" }} role="presentation">
+        <Grid container spacing={1}>
+          <Grid item xs={6}>
+            <Typography>Window Width</Typography>
+            <TextField
+              hiddenLabel
+              value={metadata.ww}
+              size="small"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                saveStates("ww", e)
+              }
+            />
+          </Grid>
 
-      <Divider />
+          <Grid item xs={6}>
+            <Typography>Window Center</Typography>
+            <TextField
+              hiddenLabel
+              value={metadata.wc}
+              size="small"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                saveStates("wc", e)
+              }
+            />
+          </Grid>
+          <Grid item xs={6}>
+            {/**fix Ci input */}
+            <Typography>Current Slice</Typography>
+            <TextField
+              hiddenLabel
+              value={metadata.ci}
+              size="small"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                saveStates("ci", e)
+              }
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography>Zoom</Typography>
+            <TextField
+              hiddenLabel
+              value={metadata.z}
+              size="small"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                saveStates("z", e)
+              }
+            />
+          </Grid>
+
+          <Grid item xs={6}>
+            <Typography>Pan X</Typography>
+            <TextField
+              hiddenLabel
+              value={metadata.px}
+              size="small"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                saveStates("px", e)
+              }
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography>Pan Y</Typography>
+            <TextField
+              hiddenLabel
+              value={metadata.py}
+              size="small"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                saveStates("py", e)
+              }
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Typography>r</Typography>
+            <TextField
+              hiddenLabel
+              value={metadata.r}
+              size="small"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                saveStates("r", e)
+              }
+            />
+          </Grid>
+        </Grid>
+      </Box>
     </Box>
   );
 };
