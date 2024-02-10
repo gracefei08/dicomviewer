@@ -53,7 +53,6 @@ const Viewport: React.VFC<ViewportProps> = ({ metadataId, stateFlag, setStateFla
     }
   }
 
-
   useEffect(() => {
 
     const viewportInput = {

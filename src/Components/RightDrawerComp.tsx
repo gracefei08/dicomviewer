@@ -27,7 +27,6 @@ const RightDrawerComp: React.VFC<RidgeDrawerCompProps> = ({ metaDataList, setMet
     const [rows, setRows] = useState<number>(1);
     const [cols, setCols] = useState<number>(1);
 
-    //console.log(metaDataList)
     const addCol = () => {
         if (cols < 4) {
             setCols(cols + 1)
@@ -58,10 +57,7 @@ const RightDrawerComp: React.VFC<RidgeDrawerCompProps> = ({ metaDataList, setMet
             <Box
                 sx={{ width: 350 }}
                 role="presentation"
-
-
             >
-
                 <IconButton aria-label="delete" size="small" onClick={() => setDrawerState(false)}>
 
                     <CloseIcon />
