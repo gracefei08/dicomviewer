@@ -1,71 +1,74 @@
-import { createContext, useState, useEffect,  } from "react";
+import { createContext, useState, useEffect } from "react";
 import { PropsWithChildren } from "react";
-import * as cornerstone from '@cornerstonejs/core';
-import * as cornerstoneTools from '@cornerstonejs/tools';
-import { useChromeStorageLocal } from 'use-chrome-storage';
+import * as cornerstone from "@cornerstonejs/core";
+import * as cornerstoneTools from "@cornerstonejs/tools";
+import { useChromeStorageLocal } from "use-chrome-storage";
 
 //@ts-ignore
-import cornerstoneDICOMImageLoader from '@cornerstonejs/dicom-image-loader';
-import dicomParser from 'dicom-parser';
-import { generateMetaData,MetaData } from '../utils';
+import cornerstoneDICOMImageLoader from "@cornerstonejs/dicom-image-loader";
+import dicomParser from "dicom-parser";
+import { generateMetaData, MetaData } from "../utils";
 
-//export const DataContext = createContext();    
+//export const DataContext = createContext();
 interface MetaDataListContextProp {
-    metaDataList:MetaData[],
-    setMetaDataList: React.Dispatch<React.SetStateAction<MetaData[]>>,
-  };
-  
-export const RenderEngineContext = createContext<cornerstone.RenderingEngine | undefined>(undefined);
-export const MetaDataListContext = createContext<MetaDataListContextProp>({metaDataList:[],setMetaDataList:()=>{}});
+  metaDataList: MetaData[];
+  setMetaDataList: React.Dispatch<React.SetStateAction<MetaData[]>>;
+}
 
+export const RenderEngineContext = createContext<
+  cornerstone.RenderingEngine | undefined
+>(undefined);
+export const MetaDataListContext = createContext<MetaDataListContextProp>({
+  metaDataList: [],
+  setMetaDataList: () => {},
+});
 
 export const DataProvider = ({ children }: PropsWithChildren<{}>) => {
-    //const [data, dispatch] = useReducer(dataReducer, urlData);
-    const [metaDataList, setMetaDataList] = useState<MetaData[]>([]);
-    const [renderingEngine, SetRenderingEngine] = useState<cornerstone.RenderingEngine>()
-    const [value, setValue, isPersistent, error, isInitialStateResolved] = useChromeStorageLocal("PAC_DATA", []);
-    
-    useEffect(() => {
-        const setupCornerstone = async () => {
-            cornerstoneDICOMImageLoader.external.cornerstone = cornerstone;
-            cornerstoneDICOMImageLoader.external.dicomParser = dicomParser;
-            await cornerstone.init();
-            await cornerstoneTools.init();
+  //const [data, dispatch] = useReducer(dataReducer, urlData);
+  const [metaDataList, setMetaDataList] = useState<MetaData[]>([]);
+  const [renderingEngine, SetRenderingEngine] =
+    useState<cornerstone.RenderingEngine>();
+  const [value, setValue, isPersistent, error, isInitialStateResolved] =
+    useChromeStorageLocal("PAC_DATA", []);
 
-            const renderingEngineId = 'myRenderingEngine';
-            const re = new cornerstone.RenderingEngine(renderingEngineId);
-            SetRenderingEngine(re)
+  useEffect(() => {
+    const setupCornerstone = async () => {
+      cornerstoneDICOMImageLoader.external.cornerstone = cornerstone;
+      cornerstoneDICOMImageLoader.external.dicomParser = dicomParser;
+      await cornerstone.init();
+      await cornerstoneTools.init();
 
-            const {
-                PanTool,
-                WindowLevelTool,
-                StackScrollTool,
-                StackScrollMouseWheelTool,
-                ZoomTool,
-                PlanarRotateTool,
-            } = cornerstoneTools;
+      const renderingEngineId = "myRenderingEngine";
+      const re = new cornerstone.RenderingEngine(renderingEngineId);
+      SetRenderingEngine(re);
 
-            cornerstoneTools.addTool(PanTool);
-            cornerstoneTools.addTool(WindowLevelTool);
-            cornerstoneTools.addTool(StackScrollTool);
-            cornerstoneTools.addTool(StackScrollMouseWheelTool);
-            cornerstoneTools.addTool(ZoomTool);
-            cornerstoneTools.addTool(PlanarRotateTool);
+      const {
+        PanTool,
+        WindowLevelTool,
+        StackScrollTool,
+        StackScrollMouseWheelTool,
+        ZoomTool,
+        PlanarRotateTool,
+      } = cornerstoneTools;
 
-        };
+      cornerstoneTools.addTool(PanTool);
+      cornerstoneTools.addTool(WindowLevelTool);
+      cornerstoneTools.addTool(StackScrollTool);
+      cornerstoneTools.addTool(StackScrollMouseWheelTool);
+      cornerstoneTools.addTool(ZoomTool);
+      cornerstoneTools.addTool(PlanarRotateTool);
+    };
 
-        setupCornerstone();
-
-    }, []);
-    useEffect(() => {
-        setMetaDataList(generateMetaData(value))
-    }, [value])
-    return (
-        <RenderEngineContext.Provider value={renderingEngine}>
-         <MetaDataListContext.Provider value={{metaDataList,setMetaDataList}}>
-                {children}
-            </MetaDataListContext.Provider>
-        </RenderEngineContext.Provider>
-
-    );
+    setupCornerstone();
+  }, []);
+  useEffect(() => {
+    setMetaDataList(generateMetaData(value));
+  }, [value]);
+  return (
+    <RenderEngineContext.Provider value={renderingEngine}>
+      <MetaDataListContext.Provider value={{ metaDataList, setMetaDataList }}>
+        {children}
+      </MetaDataListContext.Provider>
+    </RenderEngineContext.Provider>
+  );
 };

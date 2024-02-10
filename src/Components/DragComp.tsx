@@ -41,7 +41,6 @@ const DragComp: React.VFC<DragCompProps> = ({
 
   return (
   
-
     <Box
       sx={{
         width: 76,
