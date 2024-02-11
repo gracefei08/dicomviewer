@@ -1,10 +1,11 @@
-# Setup  and Testing Chrome extension
-Install dependency
+# Setup 
+Install dependency:
 ### `npm i`
 
-The first build will give and error with the dependency. Go to the Node module with error and to suggested line of code
+The first build will give and error with the dependency. Go to the Node module with error and edit line of code with the suggested line
 
-Build extension
+# Testing Chrome extension
+Build extension:
 ### `npm run build`
 Go to:  chrome://extensions/
 
