@@ -7,7 +7,7 @@ The first build will give and error with the dependency. Go to the Node module w
 # Testing Chrome extension
 Build extension:
 ### `npm run build`
-Go to:  chrome://extensions/
+Go to:  [chrome://extensions/](chrome://extensions/)
 
 Turn on Developer Mode
 
