@@ -1,10 +1,22 @@
-# Testing Chrome extension
+# Setup  and Testing Chrome extension
+Install dependency
+### `npm i`
+
+The first build will give and error with the dependency. Go to the Node module with error and to suggested line of code
+
+Build extension
 ### `npm run build`
 Go to:  chrome://extensions/
 
 Turn on Developer Mode
 
 Load in the build folder
+
+Pin and open the extension on Pacsbin website
+Sample Website:
+[https://www.pacsbin.com/c/WJz2_Na9yu?s=60c7def092f81d03854893fd&i=60c7def092f81d0385489450&ww=1500&wc=-72&an=false&header=false&notes=false](https://www.pacsbin.com/c/WJz2_Na9yu?s=60c7def092f81d03854893fd&i=60c7def092f81d0385489450&ww=1500&wc=-72&an=false&header=false&notes=false)
+
+
 
 
 
