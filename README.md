@@ -14,6 +14,7 @@ Turn on Developer Mode
 Load in the build folder
 
 Pin and open the extension on Pacsbin website
+
 Sample Website:
 [https://www.pacsbin.com/c/WJz2_Na9yu?s=60c7def092f81d03854893fd&i=60c7def092f81d0385489450&ww=1500&wc=-72&an=false&header=false&notes=false](https://www.pacsbin.com/c/WJz2_Na9yu?s=60c7def092f81d03854893fd&i=60c7def092f81d0385489450&ww=1500&wc=-72&an=false&header=false&notes=false)
 
