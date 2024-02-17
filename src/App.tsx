@@ -14,6 +14,10 @@ import { MetaData } from "./utils";
 import DndDrawerComp from "./Components/DndDrawerComp";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { createTheme } from '@mui/material/styles';
+import './App.css';
+
+
 
 function App() {
   const { metaDataList, setMetaDataList } = useContext(MetaDataListContext);
@@ -31,13 +35,17 @@ function App() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div>
+      <div className='front'>
         <HeaderComp />
         <Divider />
+   
+       <div className = 'button-container'>
+        <button className='button' onClick={handleClick2} >
+        Organize Layout 
+        </button>
+      </div>
+ 
 
-        <Button variant="contained" disableElevation onClick={handleClick2}>
-          Organize Layout
-        </Button>
         <Drawer
           anchor="left"
           open={dndDrawerState}
@@ -60,16 +68,17 @@ function App() {
           />
         </Drawer>
         {metaDataList.map((metadata) => (
-          <Card sx={{ maxWidth: 350 }}>
+          <button className='button-48'>
             <CardActionArea onClick={() => handleClick(metadata)}>
               <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {metadata.label}
+                <Typography gutterBottom variant="h6" component="div"sx= {{fontFamily: "Segoe UI" }}>
+                <span>{metadata.label}</span> 
                 </Typography>
               </CardContent>
             </CardActionArea>
-          </Card>
+          </button>
         ))}
+
       </div>
     </DndProvider>
   );
